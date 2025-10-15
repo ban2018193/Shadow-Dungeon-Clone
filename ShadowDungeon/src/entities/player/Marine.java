@@ -9,6 +9,7 @@ public class Marine extends Player{
         super(player, "res/marine_right.png");
         setPlayerL("res/marine_left.png");
         setPlayerR("res/marine_right.png");
+        setChoseChar(true);
     }
 
     @Override

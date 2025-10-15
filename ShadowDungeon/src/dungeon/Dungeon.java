@@ -4,7 +4,7 @@ import bagel.*;
 import bagel.util.Point;
 
 import rooms.*;
-import entities.player.Player;
+import entities.player.*;
 import config.GameConfig;
 
 
@@ -30,7 +30,7 @@ public class Dungeon {
     private final String coinsTitle;
     private final Point healthStat;
     private final Point coinStat;
-    private final Player player;
+    private final PlayerCharacter player;
     private final Font titleFont;
 
 
@@ -49,7 +49,7 @@ public class Dungeon {
         this.coinsTitle = config.COIN_DISPLAY;
         this.healthStat = config.HEALTH_STAT_POS;
         this.coinStat = config.COIN_STAT_POS;
-        this.player = new Player();
+        this.player = new PlayerCharacter();
         this.END_ROOM = rooms.length - 1;
         this.titleFont = new Font(config.FONT_PATH,
                 config.PLAYER_STATS_FONT_SIZE);
@@ -64,10 +64,11 @@ public class Dungeon {
 
     // check if player has lost the game or not, move to end room if lost
     public void checkIfLost() {
-        if (player.getHealth() <= 0) {
+        Player playerChar = player.getPlayer();
+        if (playerChar.getHealth() <= 0) {
             ((EndRoom)rooms[END_ROOM]).setLostStatus(true);
             if (!hasLost) {
-                player.movePosition(config.PLAYER_START_POS);
+                playerChar.movePosition(config.PLAYER_START_POS);
             }
             hasLost = true;
             moveToRoom(END_ROOM);
@@ -78,10 +79,11 @@ public class Dungeon {
 
     // render the stats entities in this dungeon
     private void renderStat() {
-        double health = player.getHealth();
+        Player playerChar = player.getPlayer();
+        double health = playerChar.getHealth();
         String healthText = String.format(healthTitle + " %.1f", health);
 
-        double coins = player.getCoins();
+        double coins = playerChar.getCoins();
         String coinText = String.format(coinsTitle + " %.1f", coins);
 
         // render stats of player
@@ -91,20 +93,18 @@ public class Dungeon {
 
     // ----- main render -----
     public void render() {
+        Player playerChar = player.getPlayer();
         activeRoom.render(); // render the current active room
         renderStat(); // render thet current stats of the player
-        player.render(); // finally render the character moving around
+        playerChar.render(); // finally render the character moving around
     }
 
     // ---- updating frames -----
     public void update(Input input) {
-        activeRoom.update(player, input, this);
+        Player playerChar = player.getPlayer();
+        activeRoom.update(playerChar, input, this);
         render();
         checkIfLost();
-
     }
-
-    // ---- getters -----
-    public Player getPlayer() {return player;}
 
 }

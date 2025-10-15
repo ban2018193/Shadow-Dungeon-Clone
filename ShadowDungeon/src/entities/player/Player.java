@@ -17,6 +17,7 @@ public class Player extends Entity {
     // ------ player stats -----
     private double health;
     private double coins;
+    private boolean choseChar = false;
 
     // ---- player settings ----
     private final int movingSpeed;
@@ -113,6 +114,10 @@ public class Player extends Entity {
     public double getHealth() {return health;}
     public double getCoins() {return coins;}
 
+    public boolean hasChoseChar() {
+        return choseChar;
+    }
+
     // ---- setters ----
     public void updateHealth(double health) {
         this.health += health;
@@ -128,5 +133,9 @@ public class Player extends Entity {
 
     public void setPlayerL(String path) {
         this.playerR = new Image(path);
+    }
+
+    public void setChoseChar(boolean choseChar) {
+        this.choseChar = choseChar;
     }
 }

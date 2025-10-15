@@ -12,13 +12,19 @@ import entities.player.Player;
  */
 public class PrepRoom extends OutsideRoom {
 
+    private final int N_CHARACTERS = 2;
     // ----- prompts messages ----
-    private final Font promptFont;
-    private final String prompt;
+    private final Font promptFont = new Font(getConfig().FONT_PATH, getConfig().PROMPT_FONT_SIZE);
+    private final Font spriteFont = new Font(getConfig().FONT_PATH, getConfig().PLAYER_STATS_FONT_SIZE);
+    private final String prompt = getConfig().MOVE_MESSAGE;
     private final Point promptXY;
+    private final Image[] spriteImage = {new Image("res/marine_sprite.png"),
+            new Image("res/robot_sprite.png")};
+    private final Point[] spriteXY = {getConfig().MARINE_POS, getConfig().ROBOT_POS};
+    private final Point[] spriteTextXY = {getConfig().MARINE_MESSAGE_POS, getConfig().ROBOT_MESSAGE_POS};
+    private final String[] spriteText = {getConfig().MARINE_DESCRIPTION, getConfig().ROBOT_DESCRIPTION};
 
     // ----- constructors ----
-
     /**
      * create a prep room, has message prompts, and its own title
      * @param index room index in the dungeon
@@ -27,9 +33,6 @@ public class PrepRoom extends OutsideRoom {
         super(index);
         setTitle(getConfig().TITLE); // set room tittle
         // set up prompt messages settings
-        int promptSize = getConfig().PROMPT_FONT_SIZE;
-        promptFont = new Font(getConfig().FONT_PATH, promptSize);
-        this.prompt = getConfig().MOVE_MESSAGE;
         double promptY = getConfig().MOVE_MESSAGE_Y;
         double promptX = findStartX(prompt, promptFont);
         promptXY = new Point(promptX, promptY);
@@ -49,20 +52,29 @@ public class PrepRoom extends OutsideRoom {
     public void update(Player player, Input input, Dungeon dungeon) {
         super.update(player, input, dungeon);
 
+        if (player.hasChoseChar() && input.wasPressed(Keys.R)) {
+            unlockPrimaryDoor();
+        }
+
         if (input.wasPressed(Keys.R)) {
             unlockPrimaryDoor();
         }
+
     }
 
     // ----- render ------
 
-    public void renderPrompt() {
+    public void renderPrep() {
         promptFont.drawString(prompt, promptXY.x, promptXY.y);
+        for (int i = 0; i < N_CHARACTERS; i++) {
+            spriteFont.drawString(spriteText[i], spriteTextXY[i].x, spriteTextXY[i].y);
+            spriteImage[i].draw(spriteXY[i].x, spriteXY[i].y);
+        }
     }
 
     @Override
     public void render() {
         super.render();
-        renderPrompt();
+        renderPrep();
     }
 }

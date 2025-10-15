@@ -12,6 +12,7 @@ public class Robot extends Player{
         super(player, "res/robot_right.png");
         setPlayerL("res/robot_left.png");
         setPlayerR("res/robot_right.png");
+        setChoseChar(true);
     }
 
     @Override
