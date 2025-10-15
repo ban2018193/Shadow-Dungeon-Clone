@@ -4,6 +4,7 @@ import bagel.*;
 import bagel.util.Point;
 import java.util.Properties;
 
+import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
 import utils.IOUtils;
@@ -27,13 +28,13 @@ public class BattleRoom extends Room{
 
     /**
      * create a battle room that has obstacles and enemies
-     * @param gameProps game configurations for images, obstacles, and all the settings
      * @param index is the current room index this battle room is in the dungeon
      * @param roomId is which battle room is this, a or b
      */
-    public BattleRoom(Properties gameProps, int index, String roomId) {
+    public BattleRoom(int index, String roomId) {
         super(index);
 
+        GameConfig config = getConfig();
         // name of property for positions of obstacles
         String wallKey = "wall." + roomId;
         String riverKey = "river." + roomId;
@@ -41,10 +42,10 @@ public class BattleRoom extends Room{
         String enemyKey = "keyBulletKin." + roomId;
 
         // ----- obstacles placements -----
-        Point[] wallPositions = IOUtils.parseMultipleCoords(gameProps.getProperty(wallKey));
-        Point[] riverPositions = IOUtils.parseMultipleCoords(gameProps.getProperty(riverKey));
-        String[] treasureInfo = IOUtils.parseContents(gameProps.getProperty(treasureKey), ";");
-        Point[] keyBulletKinPositions = IOUtils.parseMultipleCoords(gameProps.getProperty(enemyKey));
+        Point[] wallPositions = config.getPos(wallKey);
+        Point[] riverPositions = config.getPos(riverKey);
+        String[] treasureInfo = config.getTreasureInfo(treasureKey);
+        Point[] keyBulletKinPositions = config.getPos(enemyKey);
 
         // initialise the key required to open the door to number of key bullet kins
         this.keyRequire = keyBulletKinPositions.length;
@@ -143,7 +144,7 @@ public class BattleRoom extends Room{
         int numRivers = riverPositions.length;
         River[] rivers = new River[numRivers];
         for (int i = 0; i < numRivers; i++) {
-            rivers[i] = new River(riverPositions[i], getConfig());
+            rivers[i] = new River(riverPositions[i]);
         }
         return rivers;
     }

@@ -15,8 +15,7 @@ import dungeon.Dungeon;
  */
 public abstract class  Room {
 
-    private static final GameConfig config = GameConfig.getInstance();
-
+    private GameConfig config = GameConfig.getInstance();
     // ----- room stats -----
     private final int index; // stage of room is in dungeon
     private static final int MAX_DOOR = 2;
@@ -58,7 +57,7 @@ public abstract class  Room {
             doors[i].updateCurrentDoorSide(this);
             doors[i].autoLock(player);
 
-            int hasTryEnterDoor = doors[i].enterDoor(player.getBoundingBox(), this);
+            int hasTryEnterDoor = doors[i].enterDoor(player, this);
             if (hasTryEnterDoor >= 0) {
                 player.movePosition(doors[i].getSpawnLocation());
                 dungeon.moveToRoom(hasTryEnterDoor);
@@ -102,7 +101,7 @@ public abstract class  Room {
     private Point fixWithinWindow(Player player, Point nextMove) {
 
         Rectangle windowBox = new Rectangle(0, 0,
-                GameConfig.getInstance().WINDOW_WIDTH, GameConfig.getInstance().WINDOW_HEIGHT);
+                config.WINDOW_WIDTH, config.WINDOW_HEIGHT);
         Rectangle playerBox = player.getImage().getBoundingBoxAt(nextMove);
 
         double x = nextMove.x;
@@ -182,7 +181,10 @@ public abstract class  Room {
     public int getIndex() {return index;}
     public Door[] getDoors() {return doors;}
     public int getNumOfDoors() {return numOfDoors;}
-    public static GameConfig getConfig() {return config;};
+
+    public GameConfig getConfig() {
+        return config;
+    }
 
     // ----- update -----
     public void updateNumOfDoors() {

@@ -15,9 +15,9 @@ public class River extends Entity{
     private final double damage;
 
     // ----  constructor ----
-    public River(Point position, GameConfig config) {
+    public River(Point position) {
         super(position, "res/river.png");
-        this.damage = config.RIVER_DAMAGE_PER_FRAME;
+        this.damage = GameConfig.getInstance().RIVER_DAMAGE_PER_FRAME;
 
     }
 

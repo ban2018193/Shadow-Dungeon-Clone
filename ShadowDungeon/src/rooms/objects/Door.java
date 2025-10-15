@@ -106,11 +106,11 @@ public class Door {
 
     /**
      * handles player entering the door
-     * @param playerBox player's physical box
+     * @param player player's physical box
      * @param currentRoom the current room this door is in
      * @return destination room index if successfully entered, otherwise return FAILED
      */
-    public int enterDoor(Rectangle playerBox, Room currentRoom) {
+    public int enterDoor(Player player, Room currentRoom) {
         // find current door side
         updateCurrentDoorSide(currentRoom);
         int sideIndex = sideToIndex(currentDoor);
@@ -120,7 +120,7 @@ public class Door {
             return FAILED;
         }
 
-        if (doorBox[sideIndex].intersects(playerBox)) {
+        if (doorBox[sideIndex].intersects(player.getBoundingBox())) {
             // set destination of next room base on the curr room door is in
             DoorSide destination = (currentDoor == DoorSide.ROOM_A) ? DoorSide.ROOM_B : DoorSide.ROOM_A;
             int destinationIndex = rooms[sideToIndex(destination)].getIndex();

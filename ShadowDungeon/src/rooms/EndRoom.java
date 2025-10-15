@@ -20,7 +20,7 @@ public class EndRoom extends OutsideRoom {
         winText = getConfig().GAME_END_WON;
         lostText =  getConfig().GAME_END_LOST;
         // default will assume player is winning unless they lost
-        setTITLE(winText);
+        setTitle(winText);
     }
 
     // ---- manage status ----
@@ -28,10 +28,10 @@ public class EndRoom extends OutsideRoom {
     // set title to lost text, and lock all the doors if player lost
     public void setLostStatus(boolean hasLost) {
         if (hasLost) {
-            setTITLE(lostText);
+            setTitle(lostText);
             lockAllDoors();
         } else {
-            setTITLE(winText);
+            setTitle(winText);
         }
     }
 

@@ -9,7 +9,6 @@ import dungeon.Dungeon;
 import entities.*;
 import rooms.*;
 import rooms.objects.Door;
-import utils.IOUtils;
 
 import javax.swing.*;
 
@@ -18,20 +17,15 @@ public class ShadowDungeon extends AbstractGame {
 
     // ----- settings -----
     public final GameConfig config = GameConfig.getInstance(); // contains all of teh configurations settings
-    private final Properties GAME_PROPS;
-    private final Properties MESSAGE_PROPS;
     private static ShadowDungeon instance;
     private Dungeon shadowDungeon;
 
     // ----- constructor ----
-    public ShadowDungeon(Properties gameProps, Properties messageProps) {
-        super(Integer.parseInt(gameProps.getProperty("window.width")),
-                Integer.parseInt(gameProps.getProperty("window.height")),
-                messageProps.getProperty("title"));
+    public ShadowDungeon() {
+        super(GameConfig.getInstance().WINDOW_WIDTH,
+                GameConfig.getInstance().WINDOW_HEIGHT, GameConfig.getInstance().TITLE);
 
         instance = this;
-        this.GAME_PROPS = gameProps;
-        this.MESSAGE_PROPS = messageProps;
         this.shadowDungeon = new Dungeon(createRooms());
     }
 
@@ -43,8 +37,8 @@ public class ShadowDungeon extends AbstractGame {
 
         // manually create rooms
         rooms[0] = new PrepRoom(0);
-        rooms[1] = new BattleRoom(GAME_PROPS, 1, "A");
-        rooms[2] = new BattleRoom(GAME_PROPS, 2, "B");
+        rooms[1] = new BattleRoom(1, "A");
+        rooms[2] = new BattleRoom(2, "B");
         rooms[3] = new EndRoom(3);
 
         // create doors
@@ -98,10 +92,7 @@ public class ShadowDungeon extends AbstractGame {
      * @param args Command-line arguments (not used in this game).
      */
     public static void main(String[] args) {
-        Properties gameProps = IOUtils.readPropertiesFile("res/app.properties");
-        Properties messageProps = IOUtils.readPropertiesFile("res/message.properties");
-        GameConfig config = new GameConfig(gameProps, messageProps);
-        ShadowDungeon game = new ShadowDungeon(gameProps, messageProps);
+        ShadowDungeon game = new ShadowDungeon();
         game.run();
     }
 }

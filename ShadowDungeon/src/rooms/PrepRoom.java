@@ -2,6 +2,7 @@ package rooms;
 
 import bagel.*;
 import bagel.util.Point;
+import config.GameConfig;
 import dungeon.Dungeon;
 import entities.Player;
 
@@ -25,8 +26,7 @@ public class PrepRoom extends OutsideRoom {
      */
     public PrepRoom(int index) {
         super(index);
-        setTITLE(getConfig().TITLE); // set room tittle
-
+        setTitle(getConfig().TITLE); // set room tittle
         // set up prompt messages settings
         int promptSize = getConfig().PROMPT_FONT_SIZE;
         promptFont = new Font(getConfig().FONT_PATH, promptSize);

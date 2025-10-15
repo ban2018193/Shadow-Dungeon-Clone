@@ -25,8 +25,9 @@ public class Player extends Entity {
     private final Image playerL = new Image("res/player_left.png");
 
     // ------ constructors -----
-    public Player(GameConfig config) {
-        super(config.PLAYER_START_POS, "res/player_right.png");
+    public Player() {
+        super(GameConfig.getInstance().PLAYER_START_POS, "res/player_right.png");
+        GameConfig config = GameConfig.getInstance();
         this.movingSpeed = config.MOVING_SPEED;
         this.health = config.INITIAL_HEALTH;
         this.coins = config.INITIAL_COINS;

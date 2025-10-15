@@ -49,7 +49,7 @@ public class Dungeon {
         this.coinsTitle = config.COIN_DISPLAY;
         this.healthStat = config.HEALTH_STAT_POS;
         this.coinStat = config.COIN_STAT_POS;
-        this.player = new Player(config);
+        this.player = new Player();
         this.END_ROOM = rooms.length - 1;
         this.titleFont = new Font(config.FONT_PATH,
                 config.PLAYER_STATS_FONT_SIZE);

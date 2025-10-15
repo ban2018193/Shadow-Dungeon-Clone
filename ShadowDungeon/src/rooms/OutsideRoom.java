@@ -13,7 +13,7 @@ import rooms.objects.Door;
 public abstract class OutsideRoom extends Room{
 
     // ----- the main title of the room -----
-    private String TITLE;
+    private String title;
     private Point titleXY;
     private final double titleY;
 
@@ -43,7 +43,7 @@ public abstract class OutsideRoom extends Room{
 
     // set up the title location
     public void setTitleSettings() {
-        double titleX = findStartX(TITLE, titleFont);
+        double titleX = findStartX(title, titleFont);
         titleXY = new Point(titleX, this.titleY);
     }
 
@@ -75,7 +75,7 @@ public abstract class OutsideRoom extends Room{
 
     // render title and restart area
     public void renderOutside() {
-        titleFont.drawString(TITLE, titleXY.x, titleXY.y);
+        titleFont.drawString(title, titleXY.x, titleXY.y);
         restartAreaImage.draw(restartAreaXY.x, restartAreaXY.y);
     }
 
@@ -86,8 +86,8 @@ public abstract class OutsideRoom extends Room{
     }
 
     // ----- setter -----
-    public void setTITLE(String TITLE) {
-        this.TITLE = TITLE;
+    public void setTitle(String title) {
+        this.title = title;
         setTitleSettings();
     }
 }
