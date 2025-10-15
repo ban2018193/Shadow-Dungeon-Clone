@@ -2,6 +2,7 @@ package entities;
 
 import bagel.util.Point;
 import config.GameConfig;
+import entities.player.Player;
 
 
 /**
@@ -27,6 +28,6 @@ public class River extends Entity{
     }
 
     public void damagePlayer(Player player) {
-        player.updateHealth(damage);
+        player.gainDamage(damage, this);
     }
 }

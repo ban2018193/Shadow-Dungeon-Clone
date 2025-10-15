@@ -6,7 +6,7 @@ import bagel.util.Rectangle;
 import config.GameConfig;
 import rooms.objects.Door;
 
-import entities.Player;
+import entities.player.Player;
 import dungeon.Dungeon;
 
 /**
@@ -15,7 +15,7 @@ import dungeon.Dungeon;
  */
 public abstract class  Room {
 
-    private GameConfig config = GameConfig.getInstance();
+    private final GameConfig config = GameConfig.getInstance();
     // ----- room stats -----
     private final int index; // stage of room is in dungeon
     private static final int MAX_DOOR = 2;

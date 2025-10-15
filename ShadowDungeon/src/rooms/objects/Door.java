@@ -4,7 +4,7 @@ import bagel.util.Point;
 import bagel.*;
 import bagel.util.Rectangle;
 import rooms.Room;
-import entities.Player;
+import entities.player.Player;
 
 
 /**

@@ -2,12 +2,11 @@ package rooms;
 
 import bagel.*;
 import bagel.util.Point;
-import java.util.Properties;
 
 import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
-import utils.IOUtils;
+import entities.player.Player;
 
 
 /**

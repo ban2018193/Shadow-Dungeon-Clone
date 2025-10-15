@@ -3,6 +3,7 @@ package entities;
 import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
+import config.GameConfig;
 
 
 /**
@@ -10,6 +11,8 @@ import bagel.util.Rectangle;
  * includes enemies, player, river, wall, treasure box
  */
 public abstract class Entity {
+
+    private static final GameConfig config = GameConfig.getInstance();
 
     // ---- entity basic settings ----
     private Point position;
@@ -45,8 +48,12 @@ public abstract class Entity {
     public Rectangle getBoundingBox() {return image.getBoundingBoxAt(position);}
     public Point getPosition() {return position;}
     public Image getImage() {return image;}
+    public GameConfig getConfig() {
+        return config;
+    }
 
     // ---- setters ----
     public void setImage(Image image) {this.image = image;}
+
 
 }

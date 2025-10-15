@@ -1,9 +1,10 @@
-package entities;
+package entities.player;
 
 import bagel.util.Point;
 import bagel.*;
 import java.util.function.BiPredicate;
 import config.GameConfig;
+import entities.Entity;
 
 
 /**
@@ -21,8 +22,8 @@ public class Player extends Entity {
     private final int movingSpeed;
 
     // ----image sources ----
-    private final Image playerR = new Image("res/player_right.png");
-    private final Image playerL = new Image("res/player_left.png");
+    private Image playerR = new Image("res/player_right.png");
+    private Image playerL = new Image("res/player_left.png");
 
     // ------ constructors -----
     public Player() {
@@ -32,6 +33,13 @@ public class Player extends Entity {
         this.health = config.INITIAL_HEALTH;
         this.coins = config.INITIAL_COINS;
 
+    }
+
+    public Player(Player player, String imagePath) {
+        super(player.getPosition(), imagePath);
+        this.health = player.health;
+        this.coins = player.coins;
+        this.movingSpeed = player.movingSpeed;
     }
 
     // ------ movements -----
@@ -91,13 +99,13 @@ public class Player extends Entity {
         updateFacingDir(input.getMousePosition());
     }
 
-    public void updateHealth(double damage) {
+    public void gainDamage(double damage, Entity entity) {
         if (health > 0) {
             health -= damage;
         }
     }
 
-    public void updateCoin(double amount) {
+    public void gainCoin(double amount, Entity entity) {
         coins += amount;
     }
 
@@ -105,4 +113,20 @@ public class Player extends Entity {
     public double getHealth() {return health;}
     public double getCoins() {return coins;}
 
+    // ---- setters ----
+    public void updateHealth(double health) {
+        this.health += health;
+    }
+
+    public void updateCoins(double coins) {
+        this.coins += coins;
+    }
+
+    public void setPlayerR(String path) {
+        this.playerR = new Image(path);
+    }
+
+    public void setPlayerL(String path) {
+        this.playerR = new Image(path);
+    }
 }

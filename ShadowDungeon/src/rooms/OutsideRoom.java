@@ -5,7 +5,7 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 import dungeon.Dungeon;
-import entities.Player;
+import entities.player.Player;
 import rooms.objects.Door;
 
 

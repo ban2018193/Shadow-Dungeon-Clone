@@ -2,9 +2,8 @@ package rooms;
 
 import bagel.*;
 import bagel.util.Point;
-import config.GameConfig;
 import dungeon.Dungeon;
-import entities.Player;
+import entities.player.Player;
 
 
 /**

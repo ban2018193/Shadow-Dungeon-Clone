@@ -4,7 +4,7 @@ import bagel.*;
 import bagel.util.Point;
 
 import rooms.*;
-import entities.Player;
+import entities.player.Player;
 import config.GameConfig;
 
 

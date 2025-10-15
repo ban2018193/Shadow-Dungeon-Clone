@@ -1,6 +1,7 @@
 package entities;
 
 import bagel.util.Point;
+import entities.player.Player;
 
 /**
  * wall: children of entity class

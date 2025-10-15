@@ -1,5 +1,6 @@
 package entities;
 
+import entities.player.Player;
 import utils.IOUtils;
 
 
@@ -39,7 +40,7 @@ public class TreasureBox extends Entity {
             return; // do nothing if it's alr opened, or player's not touching it
         }
         isOpened = true;
-        player.updateCoin(coinValue);
+        player.gainCoin(coinValue, this);
     }
 
     // ----- rendering -----
