@@ -19,8 +19,6 @@ public class Player extends Entity {
     private double coins;
     private boolean choseChar = false;
 
-    // ---- player settings ----
-    private final int movingSpeed;
 
     // ----image sources ----
     private Image playerR = new Image("res/player_right.png");
@@ -30,7 +28,6 @@ public class Player extends Entity {
     public Player() {
         super(GameConfig.getInstance().PLAYER_START_POS, "res/player_right.png");
         GameConfig config = GameConfig.getInstance();
-        this.movingSpeed = config.MOVING_SPEED;
         this.health = config.INITIAL_HEALTH;
         this.coins = config.INITIAL_COINS;
 
@@ -40,66 +37,9 @@ public class Player extends Entity {
         super(player.getPosition(), imagePath);
         this.health = player.health;
         this.coins = player.coins;
-        this.movingSpeed = player.movingSpeed;
     }
 
     // ------ movements -----
-
-    // try (no update) to move player according to the keyboard input
-    public Point tryInput(Input input) {
-        double newX = getPosition().x;
-        double newY = getPosition().y;
-
-        if (input.isDown(Keys.S)) newY += movingSpeed;
-        if (input.isDown(Keys.W)) newY -= movingSpeed;
-        if (input.isDown(Keys.D)) newX += movingSpeed;
-        if (input.isDown(Keys.A)) newX -= movingSpeed;
-
-        return new Point(newX, newY);
-    }
-
-    /**
-     * if the tryInput move is invalid, try to slide player to valid axis
-     * @param nextMove       the next position player trying to move to
-     * @param collisionCheck check if player collides with x, y
-     * @return Point of the new valid move
-     */
-    public Point trySolveCollision(Point nextMove, BiPredicate<Double, Double> collisionCheck) {
-        double newX = nextMove.x;
-        double newY = nextMove.y;
-        Point playerPosition = getPosition();
-
-        boolean collideX = collisionCheck.test(newX, playerPosition.y);
-        boolean collideY = collisionCheck.test(playerPosition.x, newY);
-        boolean collideXY = collisionCheck.test(newX, newY);
-
-        if (!collideXY) {
-            return new Point(newX, newY); // move if is valid
-        } else if (!collideX) {
-            return new Point(newX, playerPosition.y); // try only continues moving to x if y collides
-        } else if (!collideY) {
-            return new Point(playerPosition.x, newY); // try only continues moving to y if x collides
-        } else {
-            return playerPosition; // stay in place if stuck
-        }
-    }
-
-    // ----- updates ----
-
-    public void updateFacingDir(Point cursor) {
-        boolean facingRight = cursor.x > getPosition().x;
-        if (facingRight) {
-            setImage(playerR);
-        } else {
-            setImage(playerL);
-        }
-    }
-
-    // main update method
-    public void update(Input input) {
-        updateFacingDir(input.getMousePosition());
-    }
-
     public void gainDamage(double damage, Entity entity) {
         if (health > 0) {
             health -= damage;
@@ -113,6 +53,14 @@ public class Player extends Entity {
     // ----- getters -----
     public double getHealth() {return health;}
     public double getCoins() {return coins;}
+
+    public Image getPlayerR() {
+        return playerR;
+    }
+
+    public Image getPlayerL() {
+        return playerL;
+    }
 
     public boolean hasChoseChar() {
         return choseChar;
@@ -132,7 +80,7 @@ public class Player extends Entity {
     }
 
     public void setPlayerL(String path) {
-        this.playerR = new Image(path);
+        this.playerL = new Image(path);
     }
 
     public void setChoseChar(boolean choseChar) {

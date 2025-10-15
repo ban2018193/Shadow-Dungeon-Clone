@@ -7,6 +7,7 @@ import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
 import entities.player.Player;
+import entities.player.PlayerCharacter;
 
 
 /**
@@ -59,7 +60,7 @@ public class BattleRoom extends Room{
     // ----- interactions -----
 
     @Override
-    public Point validateMove(Player player, Point nextMove) {
+    public Point validateMove(PlayerCharacter player, Point nextMove) {
         // 1. check parent class validation (doors)
         Point doorValidatedMove = super.validateMove(player, nextMove);
 
@@ -69,9 +70,9 @@ public class BattleRoom extends Room{
         }
 
         // 2. check wall collision
-        if (temporarilyCheckWallCollision(player, nextMove)) {
+        if (temporarilyCheckWallCollision(player.getPlayer(), nextMove)) {
             return player.trySolveCollision(nextMove,
-                    (x, y) -> temporarilyCheckWallCollision(player, new Point(x, y)));
+                    (x, y) -> temporarilyCheckWallCollision(player.getPlayer(), new Point(x, y)));
         }
 
         return nextMove;
@@ -116,22 +117,23 @@ public class BattleRoom extends Room{
     // ----- update upon interactions -----
 
     @Override
-    public void update(Player player, Input input, Dungeon dungeon) {
+    public void update(PlayerCharacter player, Input input, Dungeon dungeon) {
         super.update(player, input, dungeon);
+        Player playerSelf = player.getPlayer();
 
         // gain damage if went into river
         for (River river : rivers) {
-            if (river.collidesWith(player)) {river.damagePlayer(player);}
+            if (river.collidesWith(playerSelf)) {river.damagePlayer(playerSelf);}
         }
 
         // open treasure boxes
         if (input.isDown(Keys.K)) {
-            for (TreasureBox treasure : treasures) {treasure.openBox(player);}
+            for (TreasureBox treasure : treasures) {treasure.openBox(playerSelf);}
         }
 
         // defeat enemies and gain keys
         for (KeyBulletKin keyBulletKin : keyBulletKins) {
-            if (keyBulletKin.defeat(player)) {
+            if (keyBulletKin.defeat(player.getPlayer())) {
                keyRequire--;
                if (keyRequire == 0) {roomCleared();} // unlock all doors when got all keys
             }

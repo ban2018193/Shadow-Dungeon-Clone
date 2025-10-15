@@ -2,8 +2,9 @@ package rooms;
 
 import bagel.*;
 import bagel.util.Point;
+import com.sun.source.tree.ReturnTree;
 import dungeon.Dungeon;
-import entities.player.Player;
+import entities.player.*;
 
 
 /**
@@ -23,6 +24,8 @@ public class PrepRoom extends OutsideRoom {
     private final Point[] spriteXY = {getConfig().MARINE_POS, getConfig().ROBOT_POS};
     private final Point[] spriteTextXY = {getConfig().MARINE_MESSAGE_POS, getConfig().ROBOT_MESSAGE_POS};
     private final String[] spriteText = {getConfig().MARINE_DESCRIPTION, getConfig().ROBOT_DESCRIPTION};
+    private final String selectMes = getConfig().SELECT_MESSAGE;
+    private final Point selectXY;
 
     // ----- constructors ----
     /**
@@ -35,29 +38,39 @@ public class PrepRoom extends OutsideRoom {
         // set up prompt messages settings
         double promptY = getConfig().MOVE_MESSAGE_Y;
         double promptX = findStartX(prompt, promptFont);
+        double selectY = getConfig().SELECT_MESSAGE_Y;
+        double selectX = findStartX(selectMes, promptFont);
         promptXY = new Point(promptX, promptY);
-
+        selectXY = new Point(selectX, selectY);
     }
 
     // ---- door handling ----
-    private void unlockPrimaryDoor() {
+    private boolean unlockPrimaryDoor() {
         if (getNumOfDoors() > 0) {
+            if (getDoors()[0].isUnlocked()){
+                return false;
+            }
             getDoors()[0].setUnlocked(true);
         }
+        return true;
     }
 
     // ---- updates ----
 
     @Override
-    public void update(Player player, Input input, Dungeon dungeon) {
+    public void update(PlayerCharacter player, Input input, Dungeon dungeon) {
         super.update(player, input, dungeon);
 
-        if (player.hasChoseChar() && input.wasPressed(Keys.R)) {
-            unlockPrimaryDoor();
+        if (player.getPlayer().hasChoseChar() && input.wasPressed(Keys.R)) {
+            if (unlockPrimaryDoor()) {
+                return;
+            }
         }
 
         if (input.wasPressed(Keys.R)) {
-            unlockPrimaryDoor();
+            player.changeCharacter(new Robot(player.getPlayer()));
+        }else if (input.wasPressed(Keys.M)) {
+            player.changeCharacter(new Marine(player.getPlayer()));
         }
 
     }
@@ -66,6 +79,7 @@ public class PrepRoom extends OutsideRoom {
 
     public void renderPrep() {
         promptFont.drawString(prompt, promptXY.x, promptXY.y);
+        promptFont.drawString(selectMes, selectXY.x, selectXY.y);
         for (int i = 0; i < N_CHARACTERS; i++) {
             spriteFont.drawString(spriteText[i], spriteTextXY[i].x, spriteTextXY[i].y);
             spriteImage[i].draw(spriteXY[i].x, spriteXY[i].y);

@@ -101,8 +101,7 @@ public class Dungeon {
 
     // ---- updating frames -----
     public void update(Input input) {
-        Player playerChar = player.getPlayer();
-        activeRoom.update(playerChar, input, this);
+        activeRoom.update(player, input, this);
         render();
         checkIfLost();
     }

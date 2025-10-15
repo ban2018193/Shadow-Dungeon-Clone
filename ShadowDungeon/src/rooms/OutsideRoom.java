@@ -6,6 +6,7 @@ import bagel.util.Rectangle;
 
 import dungeon.Dungeon;
 import entities.player.Player;
+import entities.player.PlayerCharacter;
 import rooms.objects.Door;
 
 
@@ -60,9 +61,9 @@ public abstract class OutsideRoom extends Room{
     // ----- updates ----
 
     @Override
-    public void update(Player player, Input input, Dungeon dungeon) {
+    public void update(PlayerCharacter player, Input input, Dungeon dungeon) {
         // check for restart first
-        if (input.wasPressed(Keys.ENTER) && restartArea.intersects(player.getPosition())) {
+        if (input.wasPressed(Keys.ENTER) && restartArea.intersects(player.getPlayer().getPosition())) {
             app.ShadowDungeon.restart();
             return;
         }

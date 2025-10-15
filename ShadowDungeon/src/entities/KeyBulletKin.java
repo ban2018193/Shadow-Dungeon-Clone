@@ -2,6 +2,7 @@ package entities;
 
 import bagel.util.Point;
 import entities.player.Player;
+import entities.player.PlayerCharacter;
 
 
 /**

@@ -3,6 +3,7 @@ package entities;
 import bagel.util.Point;
 import config.GameConfig;
 import entities.player.Player;
+import entities.player.PlayerCharacter;
 
 
 /**

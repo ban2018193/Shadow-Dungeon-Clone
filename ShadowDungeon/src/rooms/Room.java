@@ -4,6 +4,7 @@ import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import config.GameConfig;
+import entities.player.PlayerCharacter;
 import rooms.objects.Door;
 
 import entities.player.Player;
@@ -40,11 +41,12 @@ public abstract class  Room {
     // ---- updating room -----
 
     // try to move player, if valid move, move player
-    private void updatePlayerMovement(Player player, Input input) {
+    private void updatePlayerMovement(PlayerCharacter player, Input input) {
+        Player playerSelf = player.getPlayer();
         player.update(input);
         Point nextMove = player.tryInput(input);
         Point validMove = validateMove(player, nextMove);
-        player.movePosition(validMove);
+        playerSelf.movePosition(validMove);
     }
 
     /**
@@ -67,23 +69,25 @@ public abstract class  Room {
     }
 
     // main update method
-    public void update(Player player, Input input, Dungeon dungeon) {
+    public void update(PlayerCharacter player, Input input, Dungeon dungeon) {
         updatePlayerMovement(player, input);
-        handleDoorInteractions(player, dungeon);
+        Player playerChar = player.getPlayer();
+        handleDoorInteractions(playerChar, dungeon);
     }
 
     // ----- check movements -----
 
     // validate player's move (collision with wall and window)
-    public Point validateMove(Player player, Point nextMove) {
+    public Point validateMove(PlayerCharacter player, Point nextMove) {
+        Player playerSelf = player.getPlayer();
         // temporarily move player to check if collides with locked doors
-        if (temporarilyCheckDoorCollision(player, nextMove)) {
+        if (temporarilyCheckDoorCollision(playerSelf, nextMove)) {
             return player.trySolveCollision(nextMove,
-                    (x, y) -> temporarilyCheckDoorCollision(player, new Point(x, y)));
+                    (x, y) -> temporarilyCheckDoorCollision(playerSelf, new Point(x, y)));
         }
 
         // if no door collision, make sure is within window
-        return fixWithinWindow(player, nextMove);
+        return fixWithinWindow(playerSelf, nextMove);
     }
 
     // temporarily move player to check door collision
