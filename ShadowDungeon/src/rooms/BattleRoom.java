@@ -6,6 +6,7 @@ import bagel.util.Point;
 import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
+import entities.Enemy.KeyBulletKin;
 import entities.player.Player;
 import entities.player.PlayerCharacter;
 

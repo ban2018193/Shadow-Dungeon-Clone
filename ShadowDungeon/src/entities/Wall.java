@@ -14,10 +14,7 @@ public class Wall extends Entity{
         super(position, "res/wall.png");
     }
 
-    // ----- interaction -----
-    public boolean collidesWith(Player player) {
-        return getBoundingBox().intersects(player.getBoundingBox());
-    }
+
 
 
 }

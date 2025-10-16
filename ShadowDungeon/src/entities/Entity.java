@@ -4,13 +4,14 @@ import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import config.GameConfig;
+import entities.player.Player;
 
 
 /**
  * handles all the entities in the game
  * includes enemies, player, river, wall, treasure box
  */
-public abstract class Entity {
+public abstract class Entity implements Collidable{
 
     private static final GameConfig config = GameConfig.getInstance();
 
@@ -42,6 +43,17 @@ public abstract class Entity {
     // ----- render this entity  ----
     public void render() {
         image.draw(position.x, position.y);
+    }
+
+    // ---- collidable ----
+    @Override
+    public boolean collidesWith(Player player) {
+        return getBoundingBox().intersects(player.getBoundingBox());
+    }
+
+    @Override
+    public boolean triggerCollisionEvent(Player player) {
+        return false;
     }
 
     // ----- getters ----

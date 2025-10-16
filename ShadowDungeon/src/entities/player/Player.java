@@ -1,8 +1,7 @@
 package entities.player;
 
-import bagel.util.Point;
+
 import bagel.*;
-import java.util.function.BiPredicate;
 import config.GameConfig;
 import entities.Entity;
 
@@ -44,6 +43,17 @@ public class Player extends Entity {
         if (health > 0) {
             health -= damage;
         }
+    }
+
+    // ---- collidable ----
+    @Override
+    public boolean collidesWith(Player player) {
+        return false;
+    }
+
+    @Override
+    public boolean triggerCollisionEvent(Player player) {
+        return false;
     }
 
     public void gainCoin(double amount, Entity entity) {

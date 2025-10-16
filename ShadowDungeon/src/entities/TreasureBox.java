@@ -32,9 +32,7 @@ public class TreasureBox extends Entity {
 
     // ---- interactions ----
 
-    public boolean collidesWith(Player player) {
-        return getBoundingBox().intersects(player.getBoundingBox());
-    }
+
 
     public void openBox(Player player) {
         if (isOpened || !collidesWith(player)){

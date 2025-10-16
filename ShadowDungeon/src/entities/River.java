@@ -24,9 +24,6 @@ public class River extends Entity{
     }
 
     // ----- interactions ----
-    public boolean collidesWith(Player player) {
-        return getBoundingBox().intersects(player.getBoundingBox());
-    }
 
     public void damagePlayer(Player player) {
         player.gainDamage(damage, this);

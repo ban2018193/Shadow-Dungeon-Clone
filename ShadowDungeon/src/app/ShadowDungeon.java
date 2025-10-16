@@ -1,6 +1,6 @@
 package app;
 
-import java.util.Properties;
+
 import bagel.*;
 import bagel.util.Point;
 

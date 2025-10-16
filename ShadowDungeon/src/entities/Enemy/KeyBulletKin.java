@@ -1,8 +1,8 @@
-package entities;
+package entities.Enemy;
 
 import bagel.util.Point;
+import entities.Entity;
 import entities.player.Player;
-import entities.player.PlayerCharacter;
 
 
 /**

@@ -1,7 +1,7 @@
 package entities.player;
 
 import entities.Entity;
-import entities.KeyBulletKin;
+import entities.Enemy.KeyBulletKin;
 
 public class Robot extends Player{
 
