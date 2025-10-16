@@ -40,7 +40,9 @@ public class BattleRoom extends Room{
         String wallKey = "wall." + roomId;
         String riverKey = "river." + roomId;
         String treasureKey = "treasurebox." + roomId;
-        String enemyKey = "keyBulletKin." + roomId;
+        String keyKey = "keyBulletKin." + roomId;
+        String ashenKey = "ashenBulletKin." + roomId;
+        String bulletKey = "bulletKin." + roomId;
 
         // ----- obstacles placements -----
         Point[] wallPositions = config.getPos(wallKey);
