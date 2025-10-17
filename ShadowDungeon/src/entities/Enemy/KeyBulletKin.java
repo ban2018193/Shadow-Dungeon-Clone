@@ -5,6 +5,9 @@ import entities.Entity;
 import entities.player.Player;
 import rooms.BattleRoom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * key bullet kin: children of entity class
@@ -16,12 +19,14 @@ public class KeyBulletKin extends Enemy {
     // ---- status -----
     private boolean isDefeated = false;
     private int movingSpeed = getConfig().KEY_BULLET_KIN_SPEED;
+    private List<Point> route = new ArrayList<>();
 
     // ----- constructor -----
-    public KeyBulletKin(Point position) {
+    public KeyBulletKin(List<Point> route) {
 
-        super(position, "res/key_bullet_kin.png");
+        super(route.get(0), "res/key_bullet_kin.png");
         setHealth(getConfig().KEY_BULLET_KIN_HEALTH);
+        this.route = route;
 
     }
 

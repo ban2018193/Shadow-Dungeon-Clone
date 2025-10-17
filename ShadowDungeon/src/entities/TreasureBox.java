@@ -1,7 +1,8 @@
 package entities;
 
+import bagel.Input;
+import bagel.Keys;
 import entities.player.Player;
-import entities.player.PlayerCharacter;
 import utils.IOUtils;
 
 
@@ -13,9 +14,9 @@ public class TreasureBox extends Entity {
 
     // ----- constants -----
     private static int COIN_INDEX = 2; // coin format location in gameprop
-
+    private int numKeys = 0;
     // ----- stats ----
-    private boolean isOpened = false;
+    private boolean isUsed = false;
     private final double coinValue;
 
     // ---- constructors -----
@@ -35,10 +36,10 @@ public class TreasureBox extends Entity {
 
 
     public void openBox(Player player) {
-        if (isOpened || !collidesWith(player)){
+        if (isUsed || !collidesWith(player)){
             return; // do nothing if it's alr opened, or player's not touching it
         }
-        isOpened = true;
+        isUsed = true;
         player.gainCoin(coinValue, this);
     }
 
@@ -46,8 +47,26 @@ public class TreasureBox extends Entity {
 
     @Override
     public void render() {
-        if (!isOpened) {
+        if (!isUsed) {
            super.render(); // only render if unopen
         }
     }
+
+    @Override
+    public void tryInteract(Input input, Player player) {
+        if (input.isDown(Keys.K)) {
+            openBox(player);
+        }
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    @Override
+    public boolean isBlockable() {
+        return false;
+    }
+
+
 }

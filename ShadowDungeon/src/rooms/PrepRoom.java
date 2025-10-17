@@ -2,7 +2,6 @@ package rooms;
 
 import bagel.*;
 import bagel.util.Point;
-import com.sun.source.tree.ReturnTree;
 import dungeon.Dungeon;
 import entities.player.*;
 
@@ -47,10 +46,10 @@ public class PrepRoom extends OutsideRoom {
     // ---- door handling ----
     private boolean unlockPrimaryDoor() {
         if (getNumOfDoors() > 0) {
-            if (getDoors()[0].isUnlocked()){
+            if (!getDoors().get(0).isBlockable()){
                 return false;
             }
-            getDoors()[0].setUnlocked(true);
+            getDoors().get(0).setUnlocked(true);
         }
         return true;
     }

@@ -52,9 +52,31 @@ public abstract class Entity implements Collidable{
     }
 
     @Override
-    public boolean triggerCollisionEvent(Player player) {
-        return false;
+    public void triggerCollisionEvent(Player player) {
+        return;
     }
+
+    @Override
+    public void attackedByProjectile(Projectile proj) {
+        return;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlockable() {
+        return true;
+    }
+
+    @Override
+    public void tryInteract(Input input, Player player) {
+        return;
+    }
+
+
 
     // ----- getters ----
     public Rectangle getBoundingBox() {return image.getBoundingBoxAt(position);}

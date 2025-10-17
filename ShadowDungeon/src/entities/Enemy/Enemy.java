@@ -1,15 +1,12 @@
 package entities.Enemy;
 
 import bagel.util.Point;
-import entities.Blockable;
 import entities.Entity;
 import entities.Projectile;
 import entities.player.Player;
-import org.lwjgl.system.NativeType;
 
-public abstract class Enemy extends Entity implements Blockable {
+public abstract class Enemy extends Entity {
 
-    private boolean isDestroyable = true;
     private boolean isDefeated = false;
     private double health;
     private int coins;
@@ -22,13 +19,14 @@ public abstract class Enemy extends Entity implements Blockable {
 
     @Override
     public void attackedByProjectile(Projectile proj) {
+        // --- to be implement
         return;
     }
 
     @Override
-    public boolean triggerCollisionEvent(Player player) {
+    public void triggerCollisionEvent(Player player) {
         player.gainDamage(damage, this);
-        return false;
+        return;
     }
 
     public void takeDamage() {
@@ -44,8 +42,9 @@ public abstract class Enemy extends Entity implements Blockable {
 
     // ---- getters ---
 
-    public boolean isDestroyable() {
-        return isDestroyable;
+    @Override
+    public boolean isAttackable() {
+        return true;
     }
 
     public boolean isDefeated() {

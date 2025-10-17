@@ -50,6 +50,7 @@ public class IOUtils {
         return points.toArray(new Point[0]);
     }
 
+
     // split a string into an array of strings using the given regex
     public static String[] parseContents(String contents, String regex) {
         return contents.split(regex);

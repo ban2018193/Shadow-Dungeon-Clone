@@ -52,8 +52,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public boolean triggerCollisionEvent(Player player) {
-        return false;
+    public void triggerCollisionEvent(Player player) {
+        return;
     }
 
     public void gainCoin(double amount, Entity entity) {

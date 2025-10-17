@@ -12,6 +12,11 @@ public class BulletKin extends Enemy{
 
     public BulletKin(Point position, boolean ashen) {
         super(position, "res/bullet_kin.png");
+        if (ashen) {
+            initAshenBulletKin();
+        }else {
+            initBulletKin();
+        }
 
     }
 

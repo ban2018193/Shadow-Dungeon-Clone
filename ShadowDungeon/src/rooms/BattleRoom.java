@@ -6,9 +6,14 @@ import bagel.util.Point;
 import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
-import entities.Enemy.KeyBulletKin;
-import entities.player.Player;
-import entities.player.PlayerCharacter;
+import entities.Enemy.*;
+import entities.player.*;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 
 /**
@@ -19,11 +24,10 @@ import entities.player.PlayerCharacter;
 public class BattleRoom extends Room{
 
     // ----- obstacles classes ------
-    private final River[] rivers;
-    private final Wall[] walls;
-    private final TreasureBox[] treasures;
-    private final KeyBulletKin[] keyBulletKins;
-    private int keyRequire; // key require to unlock the doors
+    private int numEnemey = 0;
+    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Entity> entities = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
 
     // ---- constructor -----
 
@@ -37,30 +41,53 @@ public class BattleRoom extends Room{
 
         GameConfig config = getConfig();
         // name of property for positions of obstacles
-        String wallKey = "wall." + roomId;
-        String riverKey = "river." + roomId;
-        String treasureKey = "treasurebox." + roomId;
-        String keyKey = "keyBulletKin." + roomId;
-        String ashenKey = "ashenBulletKin." + roomId;
-        String bulletKey = "bulletKin." + roomId;
-
-        // ----- obstacles placements -----
-        Point[] wallPositions = config.getPos(wallKey);
-        Point[] riverPositions = config.getPos(riverKey);
-        String[] treasureInfo = config.getTreasureInfo(treasureKey);
-        Point[] keyBulletKinPositions = config.getPos(enemyKey);
-
-        // initialise the key required to open the door to number of key bullet kins
-        this.keyRequire = keyBulletKinPositions.length;
-
-        // create all the entities
-        this.rivers = createRivers(riverPositions);
-        this.walls = createWalls(wallPositions);
-        this.treasures = createTreasures(treasureInfo);
-        this.keyBulletKins = createKeyBulletKin(keyBulletKinPositions);
+        initSetUp(roomId, config);
     }
 
     // ----- interactions -----
+
+    private void initSetUp(String roomId, GameConfig config) {
+        // name of property for positions of obstacles
+        List<String> cKeys = new ArrayList<>();
+        List<String> eKeys = new ArrayList<>();
+
+        cKeys.add("river." + roomId);
+        cKeys.add("wall." + roomId);
+        cKeys.add("basket." + roomId);
+        cKeys.add("table." + roomId);
+
+        eKeys.add("keyBulletKin." + roomId);
+        eKeys.add("ashenBulletKin." + roomId);
+        eKeys.add("bulletKin." + roomId);
+
+        String treasureKey = "treasurebox." + roomId;
+
+        // ----- obstacles placements -----
+        String[] treasureInfo = config.getTreasureInfo(treasureKey);
+        for (String info: treasureInfo) {
+            entities.add(createTreasure(info));
+        }
+
+        // initialise the key required to open the door to number of key bullet kins
+
+        // create all the entities
+        List<Function<Point, Entity>> constructors = List.of(
+                River::new,
+                Wall::new,
+                Basket::new,
+                Table::new
+        );
+
+        for (int i = 0; i < constructors.size(); i++) {
+            Function<Point, Entity> constructor = constructors.get(i);
+            Point[] points = config.getPos(cKeys.get(i));
+            entities.addAll(createEntities(points, constructor));
+        }
+
+        enemies.add(createKeyBulletKin(config.getPos(eKeys.get(0))));
+        enemies.addAll(createBulletKin(config.getPos(eKeys.get(1)), true));
+        enemies.addAll(createBulletKin(config.getPos(eKeys.get(2)), false));
+    }
 
     @Override
     public Point validateMove(PlayerCharacter player, Point nextMove) {
@@ -73,34 +100,18 @@ public class BattleRoom extends Room{
         }
 
         // 2. check wall collision
-        if (temporarilyCheckWallCollision(player.getPlayer(), nextMove)) {
+        if (temporarilyCheckCollision(player.getPlayer(), nextMove, entities)) {
             return player.trySolveCollision(nextMove,
-                    (x, y) -> temporarilyCheckWallCollision(player.getPlayer(), new Point(x, y)));
+                    (x, y) -> temporarilyCheckCollision(player.getPlayer(), new Point(x, y), entities));
         }
 
         return nextMove;
     }
 
-    // check if player collides with wall
-    private boolean hasWallCollision(Player player) {
-        for (Wall wall : walls) {
-            if (wall.collidesWith(player)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    // temporarily move player to check collision with walls
-    private boolean temporarilyCheckWallCollision(Player player, Point pos) {
-        Point original = player.getPosition();
-        player.movePosition(pos);
 
-        boolean collides = hasWallCollision(player);
 
-        player.movePosition(original);
-        return collides;
-    }
+
 
     // ----- render ----
 
@@ -108,12 +119,12 @@ public class BattleRoom extends Room{
     public void render() {
         super.render();
 
-        for (Wall wall : walls) {wall.render();}
-        for (River river : rivers) {river.render();}
-        for (TreasureBox treasureBox: treasures) {treasureBox.render();}
+        for (Entity entity: entities) {
+            entity.render();
+        }
 
         if (allDoorLocked()) {
-            for (KeyBulletKin key: keyBulletKins) {key.render();}
+            for (Enemy enemy: enemies) {enemy.render();}
         }
     }
 
@@ -124,58 +135,44 @@ public class BattleRoom extends Room{
         super.update(player, input, dungeon);
         Player playerSelf = player.getPlayer();
 
-        // gain damage if went into river
-        for (River river : rivers) {
-            if (river.collidesWith(playerSelf)) {river.damagePlayer(playerSelf);}
-        }
+        // trigger collisions events if collides
+        for (Collidable collidable: entities) {
+            if (collidable.collidesWith(playerSelf)) {
+                collidable.triggerCollisionEvent(playerSelf);
+                collidable.tryInteract(input, playerSelf);
+            }
 
-        // open treasure boxes
-        if (input.isDown(Keys.K)) {
-            for (TreasureBox treasure : treasures) {treasure.openBox(playerSelf);}
         }
 
         // defeat enemies and gain keys
-        for (KeyBulletKin keyBulletKin : keyBulletKins) {
-            if (keyBulletKin.defeat(player.getPlayer())) {
-               keyRequire--;
-               if (keyRequire == 0) {roomCleared();} // unlock all doors when got all keys
-            }
-        }
+
+
     }
 
     // ---- creating obstacles ----
-    public River[] createRivers(Point[] riverPositions) {
-        int numRivers = riverPositions.length;
-        River[] rivers = new River[numRivers];
-        for (int i = 0; i < numRivers; i++) {
-            rivers[i] = new River(riverPositions[i]);
+    public <T> List<T> createEntities(Point[] poss, Function<Point, T> constructor) {
+        List<T> entities = new ArrayList<>();
+        for (Point pos : poss) {
+            entities.add(constructor.apply(pos));
         }
-        return rivers;
+        return entities;
     }
 
-    public Wall[] createWalls(Point[] wallPositions) {
-        int numWalls = wallPositions.length;
-        Wall[] walls = new Wall[numWalls];
-        for (int i = 0; i < numWalls; i++) {
-            walls[i] = new Wall(wallPositions[i]);
-        }
-        return walls;
-    }
-
-    public TreasureBox[] createTreasures(String[] treasureInfo) {
-        int numTreasures = treasureInfo.length;
-        TreasureBox[] treasures = new TreasureBox[numTreasures];
-        for (int i = 0; i < numTreasures; i++) {
-            treasures[i] = new TreasureBox(treasureInfo[i]);
-        }
-        return treasures;
-    }
-
-    public KeyBulletKin[] createKeyBulletKin(Point[] enemyPositions) {
-        KeyBulletKin[] enemies = new KeyBulletKin[keyRequire];
-        for (int i = 0; i < keyRequire; i++) {
-            enemies[i] = new KeyBulletKin(enemyPositions[i]);
+    public List<Enemy> createBulletKin(Point[] poss, boolean ashen) {
+        List<Enemy> enemies = new ArrayList<>();
+        for (Point pos : poss) {
+            enemies.add(new BulletKin(pos, ashen));
         }
         return enemies;
     }
+
+    public KeyBulletKin createKeyBulletKin(Point[] poss) {
+        List<Point> route = new ArrayList<>(Arrays.asList(poss));
+        return new KeyBulletKin(route);
+    }
+
+    public TreasureBox createTreasure(String info) {
+        return new TreasureBox(info);
+    }
+
 }

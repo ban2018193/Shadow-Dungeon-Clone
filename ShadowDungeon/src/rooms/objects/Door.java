@@ -3,6 +3,7 @@ package rooms.objects;
 import bagel.util.Point;
 import bagel.*;
 import bagel.util.Rectangle;
+import entities.Entity;
 import rooms.Room;
 import entities.player.Player;
 
@@ -13,7 +14,7 @@ import entities.player.Player;
  * 1st is A (enter from cleared stage), 2nd is B (exit to new stage)
  * handles collision, player interactions and rendering
  */
-public class Door {
+public class Door extends Entity {
 
     // ---- constants -----
     private enum DoorSide {ROOM_A, ROOM_B};
@@ -45,7 +46,9 @@ public class Door {
      * @param rooms the rooms door connected. 1st is A (enter from cleared stage), 2nd is B (exit to new stage)
      * @param startXY positions of doors in each room. 1st is position in room A, 2nd is position in room B
      */
-    public Door(Room[] rooms, Point[] startXY) { // create door logic at room
+    public Door(Room[] rooms, Point[] startXY) {
+        super(startXY[0],"res/locked_door.png" );
+        // create door logic at room
         for (int i = 0; i < CONNECTED_ROOMS; i++) {
             this.rooms[i] = rooms[i];
             this.startXY[i] = startXY[i];
@@ -138,15 +141,21 @@ public class Door {
         if (sideIndex != FAILED) {
             // render unlocked door if door is unlocked, vice versa
             Image door = isUnlocked ? doorUnlock : doorLocked;
-            door.draw(startXY[sideIndex].x, startXY[sideIndex].y);
+            setImage(door);
+            movePosition(startXY[sideIndex]);
+            super.render();
         }
     }
 
 
     // ----- getters ----
-    public boolean isUnlocked() {
-        return isUnlocked;
+    @Override
+    public boolean isBlockable() {
+        return !isUnlocked;
     }
+
+
+
 
     // ---- setters ----
 
@@ -155,4 +164,6 @@ public class Door {
     public void setStageNotClear(boolean stageNotClear) {
         this.stageNotClear[sideToIndex(currentDoor)] = stageNotClear;
     }
+
+
 }

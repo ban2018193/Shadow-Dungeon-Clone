@@ -4,11 +4,16 @@ import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import config.GameConfig;
+import entities.Collidable;
+import entities.Entity;
 import entities.player.PlayerCharacter;
 import rooms.objects.Door;
 
 import entities.player.Player;
 import dungeon.Dungeon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * abstract base class for all the rooms in the dungeon
@@ -19,11 +24,10 @@ public abstract class  Room {
     private final GameConfig config = GameConfig.getInstance();
     // ----- room stats -----
     private final int index; // stage of room is in dungeon
-    private static final int MAX_DOOR = 2;
 
     // ----- doors -----
     private int numOfDoors = 0;
-    private final Door[] doors = new Door[MAX_DOOR]; // 1st is primary door, 2nd is secondary
+    private List<Door> doors = new ArrayList<>(); // 1st is primary door, 2nd is secondary
 
     // ----- background -----
     private final Image background = new Image("res/background.png");
@@ -55,13 +59,13 @@ public abstract class  Room {
      * if yes, move to the room the door is associated with
      */
     private void handleDoorInteractions(Player player, Dungeon dungeon) {
-        for (int i = 0; i < numOfDoors; i++) {
-            doors[i].updateCurrentDoorSide(this);
-            doors[i].autoLock(player);
+        for (Door door: doors) {
+            door.updateCurrentDoorSide(this);
+            door.autoLock(player);
 
-            int hasTryEnterDoor = doors[i].enterDoor(player, this);
+            int hasTryEnterDoor = door.enterDoor(player, this);
             if (hasTryEnterDoor >= 0) {
-                player.movePosition(doors[i].getSpawnLocation());
+                player.movePosition(door.getSpawnLocation());
                 dungeon.moveToRoom(hasTryEnterDoor);
                 break;
             }
@@ -81,23 +85,23 @@ public abstract class  Room {
     public Point validateMove(PlayerCharacter player, Point nextMove) {
         Player playerSelf = player.getPlayer();
         // temporarily move player to check if collides with locked doors
-        if (temporarilyCheckDoorCollision(playerSelf, nextMove)) {
+        if (temporarilyCheckCollision(playerSelf, nextMove, doors)) {
             return player.trySolveCollision(nextMove,
-                    (x, y) -> temporarilyCheckDoorCollision(playerSelf, new Point(x, y)));
+                    (x, y) -> temporarilyCheckCollision(playerSelf, new Point(x, y), doors));
         }
 
         // if no door collision, make sure is within window
         return fixWithinWindow(playerSelf, nextMove);
     }
 
-    // temporarily move player to check door collision
-    private boolean temporarilyCheckDoorCollision(Player player, Point pos) {
-        Point originalPos = player.getPosition();
+    // temporarily move player to check collision with walls
+    public <T extends Entity> boolean temporarilyCheckCollision(Player player, Point pos, List<T> entity) {
+        Point original = player.getPosition();
         player.movePosition(pos);
 
-        boolean collides = hasDoorCollision(player);
+        boolean collides = hasBlocked(player, entity);
 
-        player.movePosition(originalPos);
+        player.movePosition(original);
         return collides;
     }
 
@@ -128,16 +132,20 @@ public abstract class  Room {
         return new Point(x, y);
     }
 
-    // check if player collides with wall
-    private boolean hasDoorCollision(Player player) {
-        for (Door door : getDoors()) {
-            if (door == null) break;
-            if (!door.isUnlocked() && door.collidesWith(player, this)) {
-                return true;
+
+    public <T extends Entity> boolean hasBlocked(Player player, List<T> entities) {
+        for (T entity : entities) {
+            if (entity.isBlockable()) {
+                if (entity instanceof Door d && d.collidesWith(player, this)) {
+                    return true;
+                } else if (entity.collidesWith(player)) {
+                    return true;
+                }
             }
         }
         return false;
     }
+
 
     // ----- rendering methods -----
 
@@ -146,8 +154,8 @@ public abstract class  Room {
     }
 
     public void renderDoors() {
-        for (int i = 0; i < numOfDoors; i++) {
-            doors[i].render(this);
+        for (Door door: doors) {
+            door.render(this);
         }
     }
 
@@ -159,22 +167,22 @@ public abstract class  Room {
     // ---- door managements ---
 
     public void addDoor(Door newDoor) {
-        doors[numOfDoors] = newDoor;
+        doors.add(newDoor);
         numOfDoors++;
     }
 
     // unlock all the doors in the room if all keys are obtained
     public void roomCleared() {
         for (int i = 0; i < numOfDoors; i++) {
-            doors[i].setUnlocked(true);
-            doors[i].setStageNotClear(false);
-            doors[i].disableAutoLock();
+            doors.get(i).setUnlocked(true);
+            doors.get(i).setStageNotClear(false);
+            doors.get(i).disableAutoLock();
         }
     }
 
     public boolean allDoorLocked() {
         for (Door door : doors) {
-            if (door.isUnlocked()){
+            if (!door.isBlockable()){
                 return false;
             }
         }
@@ -183,8 +191,11 @@ public abstract class  Room {
 
     // ----- getters -----
     public int getIndex() {return index;}
-    public Door[] getDoors() {return doors;}
     public int getNumOfDoors() {return numOfDoors;}
+
+    public List<Door> getDoors() {
+        return doors;
+    }
 
     public GameConfig getConfig() {
         return config;

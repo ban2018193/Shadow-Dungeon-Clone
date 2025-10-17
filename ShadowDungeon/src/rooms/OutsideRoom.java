@@ -51,7 +51,7 @@ public abstract class OutsideRoom extends Room{
     // add new doors into the room
     @Override
     public void addDoor(Door newDoor) {
-        getDoors()[getNumOfDoors()] = newDoor;
+        super.addDoor(newDoor);
         updateNumOfDoors();
         newDoor.updateCurrentDoorSide(this);
         newDoor.disableAutoLock();

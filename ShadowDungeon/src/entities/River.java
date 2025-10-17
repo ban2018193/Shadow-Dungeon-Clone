@@ -25,7 +25,19 @@ public class River extends Entity{
 
     // ----- interactions ----
 
-    public void damagePlayer(Player player) {
+    @Override
+    public boolean isAttackable() {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockable() {
+        return false;
+    }
+
+    @Override
+    public void triggerCollisionEvent(Player player) {
         player.gainDamage(damage, this);
     }
+
 }
