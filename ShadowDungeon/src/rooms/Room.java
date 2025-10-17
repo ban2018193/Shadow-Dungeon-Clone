@@ -79,6 +79,22 @@ public abstract class  Room {
         Player playerChar = player.getPlayer();
         handleDoorInteractions(playerChar, dungeon);
         updateProjectiles();
+
+        List<Projectile> toRemove = new ArrayList<>();
+
+        // trigger collisions events if collides
+        for (Projectile projectile: getProjectiles()) {
+            for (Door door: doors) {
+                if (projectile.collidesWith(door)) {
+                    projectile.triggerCollisionEvent(door);
+                    if (!projectile.isActive()) {
+                        toRemove.add(projectile);
+                        break; // Exit door loop
+                    }
+                }
+            }
+        }
+        projectiles.removeAll(toRemove);
     }
 
     // ----- check movements -----

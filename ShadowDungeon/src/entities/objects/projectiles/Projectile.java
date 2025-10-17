@@ -71,6 +71,10 @@ public abstract class Projectile extends Entity {
         }
     }
 
+    public  boolean collidesWith(Entity entity) {
+        return getBoundingBox().intersects(entity.getBoundingBox());
+    }
+
 
     /**
      * Check if projectile is outside window boundaries
@@ -111,5 +115,9 @@ public abstract class Projectile extends Entity {
 
     public double getDamage() {
         return damage;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 }

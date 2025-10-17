@@ -28,7 +28,6 @@ public class BattleRoom extends Room{
 
     // ----- obstacles classes ------
     private int numEnemey = 0;
-    private List<Projectile> projectiles = new ArrayList<>();
     private List<Entity> entities = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
 
@@ -146,6 +145,21 @@ public class BattleRoom extends Room{
             }
 
         }
+
+        List<Projectile> toRemove = new ArrayList<>();
+
+        for (Projectile projectile: getProjectiles()) {
+            for (Entity entity: entities) {
+                if (projectile.collidesWith(entity)) {
+                    projectile.triggerCollisionEvent(entity);
+                    if (!projectile.isActive()) {
+                        toRemove.add(projectile);
+                        break; // Exit door loop
+                    }
+                }
+            }
+        }
+        getProjectiles().removeAll(toRemove);
 
         // defeat enemies and gain keys
 
