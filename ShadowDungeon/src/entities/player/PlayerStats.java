@@ -4,32 +4,63 @@ import config.GameConfig;
 
 public class PlayerStats {
 
-    private static final GameConfig config = GameConfig.getInstance();
-    private static double health = config.INITIAL_HEALTH;
-    private static double coins = 0;
+    private final GameConfig config = GameConfig.getInstance();
+    private double health;
+    private double coins;
+    private int keys = 0;
 
-    private PlayerStats() {}
+    public PlayerStats() {
+        this.health = config.INITIAL_HEALTH;
+        this.coins = 0;
+    }
 
-    public static void gainCoin(double amount) {
+    public PlayerStats(double health, double coins) {
+        this.health = health;
+        this.coins = coins;
+    }
+
+    // ---- setters / modifiers ----
+    public void gainCoin(double amount) {
         coins += amount;
     }
 
-    public static void gainDamage(double damage) {
+    public void gainDamage(double damage) {
         if (health > 0) {
             health -= damage;
+            if (health < 0) health = 0;
         }
     }
 
-    public static void reset() {
+    public void gainKey() {
+        keys++;
+    }
+
+    public void useKey() {
+        keys--;
+    }
+
+
+
+    public void reset() {
         health = config.INITIAL_HEALTH;
         coins = 0;
     }
 
-    public static double getHealth() {
+    // ---- getters ----
+    public double getHealth() {
         return health;
     }
 
-    public static double getCoins() {
+    public double getCoins() {
         return coins;
+    }
+
+    public int getKeys() {
+        return keys;
+    }
+
+    // ---- optional helper ----
+    public boolean isDead() {
+        return health <= 0;
     }
 }

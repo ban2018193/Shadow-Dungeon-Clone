@@ -23,13 +23,16 @@ public abstract class Enemy extends Entity {
     public boolean attackedByProjectile(Projectile projectile, Player player) {
         if (projectile instanceof Bullet) {
             health -= projectile.getDamage();
+            if (health <= 0) {
+                setActive(false);
+            }
         }
         return true;
     }
 
     @Override
-    public void triggerCollisionEvent(Entity entity) {
-        if (entity instanceof Player player) {
+    public void triggerCollisionEvent(Entity entity, Player player) {
+        if (entity instanceof Player p) {
             player.gainDamage(damage, this);
         }
     }

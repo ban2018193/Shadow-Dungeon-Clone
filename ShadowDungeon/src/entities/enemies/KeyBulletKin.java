@@ -1,7 +1,9 @@
 package entities.enemies;
 
 import bagel.util.Point;
+import entities.objects.Key;
 import rooms.BattleRoom;
+import rooms.Room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,5 +58,11 @@ public class KeyBulletKin extends Enemy {
 
     }
 
+    public void deleteInactive(Room currRoom) {
+        if (!isActive() && currRoom instanceof BattleRoom room) {
+            room.getToRemoveEnemies().add(this);
+            room.getEntities().add(new Key(getPosition()));
+        }
+    }
 
 }

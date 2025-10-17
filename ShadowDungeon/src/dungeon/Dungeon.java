@@ -64,11 +64,12 @@ public class Dungeon {
 
     // check if player has lost the game or not, move to end room if lost
     public void checkIfLost() {
-        Player playerChar = player.getPlayer();
-        if (PlayerStats.getHealth() <= 0) {
+        Player playerSelf = player.getPlayer();
+        PlayerStats playerStats = playerSelf.getPlayerStats();
+        if (playerStats.getHealth() <= 0) {
             ((EndRoom)rooms[END_ROOM]).setLostStatus(true);
             if (!hasLost) {
-                playerChar.movePosition(config.PLAYER_START_POS);
+                playerSelf.movePosition(config.PLAYER_START_POS);
             }
             hasLost = true;
             moveToRoom(END_ROOM);
@@ -79,10 +80,11 @@ public class Dungeon {
 
     // render the stats entities in this dungeon
     private void renderStat() {
-        double health = PlayerStats.getHealth();
+        PlayerStats playerStats = player.getPlayer().getPlayerStats();
+        double health = playerStats.getHealth();
         String healthText = String.format(healthTitle + " %.1f", health);
 
-        double coins = PlayerStats.getCoins();
+        double coins = playerStats.getCoins();
         String coinText = String.format(coinsTitle + " %.1f", coins);
 
         // render stats of player

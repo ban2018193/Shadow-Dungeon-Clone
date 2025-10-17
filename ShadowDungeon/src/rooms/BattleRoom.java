@@ -11,6 +11,7 @@ import entities.capabilities.Collidable;
 import entities.objects.*;
 import entities.objects.projectiles.Projectile;
 import entities.player.*;
+import rooms.objects.Door;
 
 
 import java.util.ArrayList;
@@ -138,31 +139,44 @@ public class BattleRoom extends Room {
         super.update(player, input, dungeon);
         Player playerSelf = player.getPlayer();
 
-        // trigger collisions events if collides
-        for (Collidable collidable : entities) {
-            if (collidable.collidesWith(playerSelf)) {
-                collidable.triggerCollisionEvent(playerSelf);
-                collidable.tryInteract(input, playerSelf);
-            }
-
-        }
-
-        List<Projectile> toRemove = new ArrayList<>();
-
+        // projectile collide with anything (objects, enemy, or player)
         for (Projectile projectile : getProjectiles()) {
             for (Entity entity : entities) {
                 if (projectile.collidesWith(entity)) {
-                    projectile.triggerCollisionEvent(entity);
-                    if (!projectile.isActive()) {
-                        toRemove.add(projectile);
-                        break; // Exit door loop
-                    }
+                    projectile.triggerCollisionEvent(entity, playerSelf);
                 }
             }
+            for (Enemy enemy : enemies) {
+                if (projectile.collidesWith(enemy)) {
+                    projectile.triggerCollisionEvent(enemy, playerSelf);
+                }
+            }
+            projectile.deleteInactive(this);
         }
-        getProjectiles().removeAll(toRemove);
+
+        // any objects collide with the player
+        for (Entity entity : entities) {
+            // trigger event when interact with player
+            if (entity.collidesWith(playerSelf)) {
+                entity.triggerCollisionEvent(playerSelf, playerSelf);
+                entity.tryInteract(input, playerSelf);
+            }
+            entity.deleteInactive(this);
+        }
+
 
         // defeat enemies and gain keys
+        for (Enemy enemy : enemies) {
+            if (enemy.collidesWith(playerSelf)) {
+                enemy.triggerCollisionEvent(playerSelf, playerSelf);
+
+            }
+            enemy.deleteInactive(this);
+        }
+
+        getProjectiles().removeAll(getToRemoveProj());
+        enemies.removeAll(toRemoveEnemies);
+        entities.removeAll(toRemoveEntities);
 
 
     }
@@ -211,6 +225,8 @@ public class BattleRoom extends Room {
     public List<Enemy> getToRemoveEnemies() {
         return toRemoveEnemies;
     }
+
+
 }
 
 

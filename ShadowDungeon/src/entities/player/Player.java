@@ -20,6 +20,7 @@ import rooms.Room;
 public class Player extends Entity implements Shootable {
 
     // ------ player stats -----
+    private PlayerStats playerStats = new PlayerStats();
     private double damage = getConfig().FIREBALL_DAMAGE;
     private boolean choseChar = false;
     private double firingRate = getConfig().BULLET_FREQ;
@@ -101,13 +102,29 @@ public class Player extends Entity implements Shootable {
 
 
     public void gainCoin(double amount, Entity entity) {
-        PlayerStats.gainCoin(amount);
+        playerStats.gainCoin(amount);
     }
 
     public void gainDamage(double damage, Entity entity) {
-        if (PlayerStats.getHealth() > 0) {
-            PlayerStats.gainDamage(damage);
+        if (playerStats.getHealth() > 0) {
+            playerStats.gainDamage(damage);
         }
     }
 
+    public void gainKey() {
+        playerStats.gainKey();
+    }
+
+    public boolean useKey() {
+        if (playerStats.getKeys() > 0) {
+            playerStats.useKey();
+            return true;
+        }
+        return false;
+
+    }
+
+    public PlayerStats getPlayerStats() {
+        return playerStats;
+    }
 }

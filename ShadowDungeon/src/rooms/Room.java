@@ -82,12 +82,11 @@ public abstract class  Room {
         updateProjectiles();
 
 
-
         // trigger collisions events if collides
         for (Projectile projectile: getProjectiles()) {
             for (Door door: doors) {
                 if (projectile.collidesWith(door)) {
-                    projectile.triggerCollisionEvent(door);
+                    projectile.triggerCollisionEvent(door, playerChar);
                     projectile.deleteInactive(this);
                 }
             }

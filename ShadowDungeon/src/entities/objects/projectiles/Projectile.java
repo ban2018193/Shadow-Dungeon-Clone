@@ -41,10 +41,6 @@ public abstract class Projectile extends Entity {
 
     }
 
-    // Private helper methods
-    private void rechargeShoot() {
-        // TODO: logic to recharge shooting ability
-    }
 
     private void move() {
         // Get current position
@@ -65,13 +61,7 @@ public abstract class Projectile extends Entity {
     }
 
 
-    @Override
-    public void triggerCollisionEvent(Entity entity){
-        if (entity.isBlockable()) {
-            entity.attackedByProjectile(this);
-            deactivate();
-        }
-    }
+
 
     public  boolean collidesWith(Entity entity) {
         return getBoundingBox().intersects(entity.getBoundingBox());
@@ -106,8 +96,8 @@ public abstract class Projectile extends Entity {
 
     @Override
     public void deleteInactive(Room currRoom) {
-        if (!isActive() && currRoom instanceof BattleRoom room) {
-            room.getToRemoveEntities().add(this);
+        if (!isActive()) {
+            currRoom.getToRemoveProj().add(this);
         }
     }
 

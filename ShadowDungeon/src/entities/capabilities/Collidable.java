@@ -9,15 +9,12 @@ import rooms.Room;
 // by default, everything can block movement of charater, and can be attacked
 public interface Collidable{
     public boolean collidesWith(Player player);
-    public void triggerCollisionEvent(Entity entity);
+    // hit smth that affect palyer
+    public void triggerCollisionEvent(Entity entity, Player player);
+
 
     //return true if can be attacked, also deal with what happen to stats when get attack
     default boolean attackedByProjectile(Projectile proj, Player player) {
-        return true;
-    }
-
-    // when its only treated as a block (no affect to player)
-    default boolean attackedByProjectile(Projectile proj) {
         return true;
     }
 

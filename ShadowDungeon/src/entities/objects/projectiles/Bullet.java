@@ -3,6 +3,7 @@ package entities.objects.projectiles;
 import bagel.util.Point;
 import bagel.util.Vector2;
 import entities.Entity;
+import entities.enemies.Enemy;
 import entities.player.Player;
 import entities.player.PlayerCharacter;
 
@@ -13,6 +14,12 @@ public class Bullet extends Projectile {
         setSpeed(getConfig().BULLET_SPEED);
         setDamage(player.getDamage());
 
+    }
+
+    @Override
+    public void triggerCollisionEvent(Entity entity, Player player) {
+        entity.attackedByProjectile(this, player);
+        deactivate();
     }
 
 

@@ -32,8 +32,8 @@ public class River extends Entity {
     }
 
     @Override
-    public void triggerCollisionEvent(Entity entity) {
-        if (entity instanceof Player player) {
+    public void triggerCollisionEvent(Entity entity, Player player) {
+        if (entity instanceof Player) {
             player.gainDamage(damage, this);
         }
     }

@@ -59,7 +59,7 @@ public abstract class Entity implements Collidable {
     }
 
     @Override
-    public void triggerCollisionEvent(Entity entity) {
+    public void triggerCollisionEvent(Entity entity, Player player) {
     }
 
 

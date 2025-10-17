@@ -16,9 +16,7 @@ public class TreasureBox extends Entity {
 
     // ----- constants -----
     private static int COIN_INDEX = 2; // coin format location in gameprop
-    private int numKeys = 0;
     // ----- stats ----
-    private boolean isUsed = false;
     private final double coinValue;
 
     // ---- constructors -----
@@ -38,31 +36,27 @@ public class TreasureBox extends Entity {
 
 
     public void openBox(Player player) {
-        if (isUsed || !collidesWith(player)){
+        if (!isActive() || !collidesWith(player)){
             return; // do nothing if it's alr opened, or player's not touching it
         }
-        isUsed = true;
-        PlayerStats.gainCoin(coinValue);
+        setActive(false);
+        player.gainCoin(coinValue, this);
     }
 
     // ----- rendering -----
 
     @Override
     public void render() {
-        if (!isUsed) {
+        if (isActive()) {
            super.render(); // only render if unopen
         }
     }
 
     @Override
     public void tryInteract(Input input, Player player) {
-        if (input.isDown(Keys.K)) {
-            openBox(player);
+        if (input.isDown(Keys.K) && player.useKey()) {
+           openBox(player);
         }
-    }
-
-    public boolean isUsed() {
-        return isUsed;
     }
 
     @Override

@@ -82,7 +82,6 @@ public class ShadowDungeon extends AbstractGame {
     public static void restart() {
 
         instance.shadowDungeon = new Dungeon(instance.createRooms());
-        PlayerStats.reset();
     }
 
     // ----- main -----
