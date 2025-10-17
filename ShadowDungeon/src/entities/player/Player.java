@@ -2,8 +2,14 @@ package entities.player;
 
 
 import bagel.*;
+import bagel.util.Point;
+import bagel.util.Vector2;
 import config.GameConfig;
 import entities.Entity;
+import entities.capabilities.Shootable;
+import entities.objects.projectiles.Bullet;
+import entities.objects.projectiles.Projectile;
+import rooms.Room;
 
 
 /**
@@ -11,12 +17,15 @@ import entities.Entity;
  * take inputs to move around
  * has won stats of current situation (health, coins)
  */
-public class Player extends Entity {
+public class Player extends Entity implements Shootable {
 
     // ------ player stats -----
     private double health;
     private double coins;
+    private double damage = getConfig().FIREBALL_DAMAGE;
     private boolean choseChar = false;
+    private double firingRate = getConfig().BULLET_FREQ;
+    private int framesSinceLast = 0;
 
 
     // ----image sources ----
@@ -45,16 +54,6 @@ public class Player extends Entity {
         }
     }
 
-    // ---- collidable ----
-    @Override
-    public boolean collidesWith(Player player) {
-        return false;
-    }
-
-    @Override
-    public void triggerCollisionEvent(Player player) {
-        return;
-    }
 
     public void gainCoin(double amount, Entity entity) {
         coins += amount;
@@ -95,5 +94,32 @@ public class Player extends Entity {
 
     public void setChoseChar(boolean choseChar) {
         this.choseChar = choseChar;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+
+    @Override
+    public void shoot(Room currRoom, Point target) {
+        if (!hasChoseChar()) {
+            System.out.println("Can't shoot - no character chosen");  // Debug
+            return;
+        }
+
+        if (framesSinceLast < firingRate) {
+            return; // still cooling down
+        }
+        framesSinceLast = 0;
+
+        Vector2 shootDir = findShootDir(target, this.getPosition());
+        Projectile proj = new Bullet(this.getPosition(), shootDir, this);
+        currRoom.getProjectiles().add(proj);
+
+    }
+
+    public void updateFramesSinceLast() {
+       framesSinceLast++;
     }
 }

@@ -2,16 +2,20 @@ package entities.player;
 
 import bagel.Input;
 import bagel.Keys;
+import bagel.MouseButtons;
 import bagel.util.Point;
 import config.GameConfig;
+import entities.capabilities.Shootable;
+import rooms.Room;
 
+import javax.swing.*;
 import java.util.function.BiPredicate;
 
 public class PlayerCharacter {
     private Player player;
     private final int RIGHT = 0;
     private final int LEFT = 1;
-    private boolean hasChose = false;
+
 
     // ---- player settings ----
     private final int movingSpeed;;
@@ -24,13 +28,10 @@ public class PlayerCharacter {
 
     public void changeCharacter(Player player){
         this.player = player;
-        this.hasChose = true;
 
     }
 
-    public boolean hasChose() {
-        return hasChose;
-    }
+
 
     // try (no update) to move player according to the keyboard input
     public Point tryInput(Input input) {
@@ -83,12 +84,20 @@ public class PlayerCharacter {
     }
 
     // main update method
-    public void update(Input input) {
+    public void update(Input input, Room current) {
+
+
         updateFacingDir(input.getMousePosition());
+        player.updateFramesSinceLast();
+        if (input.isDown(MouseButtons.LEFT)) {
+            player.shoot(current, input.getMousePosition());
+        }
     }
 
 
     public Player getPlayer() {
         return player;
     }
+
+
 }

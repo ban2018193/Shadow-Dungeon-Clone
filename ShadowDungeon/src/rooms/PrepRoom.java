@@ -71,7 +71,6 @@ public class PrepRoom extends OutsideRoom {
         }else if (input.wasPressed(Keys.M)) {
             player.changeCharacter(new Marine(player.getPlayer()));
         }
-
     }
 
     // ----- render ------

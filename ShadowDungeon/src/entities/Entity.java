@@ -4,6 +4,8 @@ import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import config.GameConfig;
+import entities.capabilities.Collidable;
+import entities.objects.projectiles.Projectile;
 import entities.player.Player;
 
 
@@ -11,7 +13,7 @@ import entities.player.Player;
  * handles all the entities in the game
  * includes enemies, player, river, wall, treasure box
  */
-public abstract class Entity implements Collidable{
+public abstract class Entity implements Collidable {
 
     private static final GameConfig config = GameConfig.getInstance();
 
@@ -52,8 +54,7 @@ public abstract class Entity implements Collidable{
     }
 
     @Override
-    public void triggerCollisionEvent(Player player) {
-        return;
+    public void triggerCollisionEvent(Entity entity) {
     }
 
     @Override
@@ -61,15 +62,6 @@ public abstract class Entity implements Collidable{
         return;
     }
 
-    @Override
-    public boolean isAttackable() {
-        return true;
-    }
-
-    @Override
-    public boolean isBlockable() {
-        return true;
-    }
 
     @Override
     public void tryInteract(Input input, Player player) {

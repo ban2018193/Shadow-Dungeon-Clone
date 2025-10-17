@@ -6,7 +6,10 @@ import bagel.util.Point;
 import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
-import entities.Enemy.*;
+import entities.enemies.*;
+import entities.capabilities.Collidable;
+import entities.objects.*;
+import entities.objects.projectiles.Projectile;
 import entities.player.*;
 
 

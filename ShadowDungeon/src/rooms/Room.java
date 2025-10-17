@@ -4,8 +4,8 @@ import bagel.*;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import config.GameConfig;
-import entities.Collidable;
 import entities.Entity;
+import entities.objects.projectiles.Projectile;
 import entities.player.PlayerCharacter;
 import rooms.objects.Door;
 
@@ -28,6 +28,7 @@ public abstract class  Room {
     // ----- doors -----
     private int numOfDoors = 0;
     private List<Door> doors = new ArrayList<>(); // 1st is primary door, 2nd is secondary
+    private List<Projectile> projectiles = new ArrayList<>();
 
     // ----- background -----
     private final Image background = new Image("res/background.png");
@@ -47,7 +48,7 @@ public abstract class  Room {
     // try to move player, if valid move, move player
     private void updatePlayerMovement(PlayerCharacter player, Input input) {
         Player playerSelf = player.getPlayer();
-        player.update(input);
+        player.update(input, this);
         Point nextMove = player.tryInput(input);
         Point validMove = validateMove(player, nextMove);
         playerSelf.movePosition(validMove);
@@ -77,6 +78,7 @@ public abstract class  Room {
         updatePlayerMovement(player, input);
         Player playerChar = player.getPlayer();
         handleDoorInteractions(playerChar, dungeon);
+        updateProjectiles();
     }
 
     // ----- check movements -----
@@ -159,9 +161,22 @@ public abstract class  Room {
         }
     }
 
+    private void renderProjectiles() {
+        for (Projectile projectile: projectiles) {
+            projectile.render();
+        }
+    }
+
+    private void updateProjectiles() {
+        for (Projectile projectile: projectiles) {
+            projectile.update();
+        }
+    }
+
     public void render(){
         renderBackground();
         renderDoors();
+        renderProjectiles();
     }
 
     // ---- door managements ---
@@ -199,6 +214,10 @@ public abstract class  Room {
 
     public GameConfig getConfig() {
         return config;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
     }
 
     // ----- update -----

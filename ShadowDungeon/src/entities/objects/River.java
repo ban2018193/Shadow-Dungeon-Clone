@@ -1,9 +1,10 @@
-package entities;
+package entities.objects;
 
 import bagel.util.Point;
 import config.GameConfig;
+import entities.Entity;
+import entities.objects.projectiles.Projectile;
 import entities.player.Player;
-import entities.player.PlayerCharacter;
 
 
 /**
@@ -11,7 +12,7 @@ import entities.player.PlayerCharacter;
  * a form of obstacles, but can pass thru
  * damages player each frame player is in side
  */
-public class River extends Entity{
+public class River extends Entity {
 
     // ---- setting ----
     private final double damage;
@@ -26,7 +27,7 @@ public class River extends Entity{
     // ----- interactions ----
 
     @Override
-    public boolean isAttackable() {
+    public boolean isAttackable(Projectile projectile) {
         return false;
     }
 
@@ -36,8 +37,10 @@ public class River extends Entity{
     }
 
     @Override
-    public void triggerCollisionEvent(Player player) {
-        player.gainDamage(damage, this);
+    public void triggerCollisionEvent(Entity entity) {
+        if (entity instanceof Player player) {
+            player.gainDamage(damage, this);
+        }
     }
 
 }

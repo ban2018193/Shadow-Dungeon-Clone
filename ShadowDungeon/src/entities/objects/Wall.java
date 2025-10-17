@@ -1,13 +1,13 @@
-package entities;
+package entities.objects;
 
 import bagel.util.Point;
-import entities.player.Player;
+import entities.Entity;
 
 /**
  * wall: children of entity class
  * solid obstacle, player cant move thru
  */
-public class Wall extends Entity{
+public class Wall extends Entity {
 
     // ----- constructor ----
     public Wall(Point position) {

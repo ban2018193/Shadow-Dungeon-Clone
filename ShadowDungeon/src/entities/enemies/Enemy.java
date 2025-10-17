@@ -1,8 +1,8 @@
-package entities.Enemy;
+package entities.enemies;
 
 import bagel.util.Point;
 import entities.Entity;
-import entities.Projectile;
+import entities.objects.projectiles.Projectile;
 import entities.player.Player;
 
 public abstract class Enemy extends Entity {
@@ -24,9 +24,10 @@ public abstract class Enemy extends Entity {
     }
 
     @Override
-    public void triggerCollisionEvent(Player player) {
-        player.gainDamage(damage, this);
-        return;
+    public void triggerCollisionEvent(Entity entity) {
+        if (entity instanceof Player player) {
+            player.gainDamage(damage, this);
+        }
     }
 
     public void takeDamage() {
@@ -43,7 +44,7 @@ public abstract class Enemy extends Entity {
     // ---- getters ---
 
     @Override
-    public boolean isAttackable() {
+    public boolean isAttackable(Projectile projectile) {
         return true;
     }
 

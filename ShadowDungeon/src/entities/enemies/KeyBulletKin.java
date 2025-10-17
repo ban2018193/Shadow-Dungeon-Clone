@@ -1,8 +1,6 @@
-package entities.Enemy;
+package entities.enemies;
 
 import bagel.util.Point;
-import entities.Entity;
-import entities.player.Player;
 import rooms.BattleRoom;
 
 import java.util.ArrayList;

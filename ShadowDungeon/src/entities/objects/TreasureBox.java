@@ -1,7 +1,8 @@
-package entities;
+package entities.objects;
 
 import bagel.Input;
 import bagel.Keys;
+import entities.Entity;
 import entities.player.Player;
 import utils.IOUtils;
 

@@ -1,7 +1,7 @@
 package entities.player;
 
 import entities.Entity;
-import entities.River;
+import entities.objects.River;
 
 public class Marine extends Player{
 
