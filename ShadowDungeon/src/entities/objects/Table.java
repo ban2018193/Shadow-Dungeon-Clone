@@ -10,8 +10,9 @@ public class Table extends Entity {
         super(position, "res/table.png");
     }
 
-    public void attackedByProjectile(Projectile proj) {
+    public boolean attackedByProjectile(Projectile proj) {
         // to be destroyed
+        return true;
     }
 
 

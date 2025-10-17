@@ -56,9 +56,5 @@ public class KeyBulletKin extends Enemy {
 
     }
 
-    @Override
-    public boolean isDefeated() {
-        return isDefeated;
-    }
 
 }

@@ -7,6 +7,7 @@ import bagel.util.Point;
 import config.GameConfig;
 import dungeon.Dungeon;
 import entities.*;
+import entities.player.PlayerStats;
 import rooms.*;
 import rooms.objects.Door;
 
@@ -79,7 +80,9 @@ public class ShadowDungeon extends AbstractGame {
 
     // restart the game by creating a new dungeon
     public static void restart() {
+
         instance.shadowDungeon = new Dungeon(instance.createRooms());
+        PlayerStats.reset();
     }
 
     // ----- main -----

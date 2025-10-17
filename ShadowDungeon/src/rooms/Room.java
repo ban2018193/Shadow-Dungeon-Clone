@@ -29,6 +29,7 @@ public abstract class  Room {
     private int numOfDoors = 0;
     private List<Door> doors = new ArrayList<>(); // 1st is primary door, 2nd is secondary
     private List<Projectile> projectiles = new ArrayList<>();
+    private List<Projectile> toRemoveProj = new ArrayList<>();
 
     // ----- background -----
     private final Image background = new Image("res/background.png");
@@ -80,21 +81,18 @@ public abstract class  Room {
         handleDoorInteractions(playerChar, dungeon);
         updateProjectiles();
 
-        List<Projectile> toRemove = new ArrayList<>();
+
 
         // trigger collisions events if collides
         for (Projectile projectile: getProjectiles()) {
             for (Door door: doors) {
                 if (projectile.collidesWith(door)) {
                     projectile.triggerCollisionEvent(door);
-                    if (!projectile.isActive()) {
-                        toRemove.add(projectile);
-                        break; // Exit door loop
-                    }
+                    projectile.deleteInactive(this);
                 }
             }
         }
-        projectiles.removeAll(toRemove);
+        projectiles.removeAll(toRemoveProj);
     }
 
     // ----- check movements -----
@@ -234,6 +232,10 @@ public abstract class  Room {
 
     public List<Projectile> getProjectiles() {
         return projectiles;
+    }
+
+    public List<Projectile> getToRemoveProj() {
+        return toRemoveProj;
     }
 
     // ----- update -----

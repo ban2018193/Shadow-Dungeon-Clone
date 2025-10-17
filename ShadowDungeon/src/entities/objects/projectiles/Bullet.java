@@ -16,12 +16,5 @@ public class Bullet extends Projectile {
     }
 
 
-    @Override
-    public void triggerCollisionEvent(Entity entity) {
-        if (entity.isAttackable(this)) {
-            deactivate();
-        }
-
-    }
 
 }

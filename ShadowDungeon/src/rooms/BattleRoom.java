@@ -24,18 +24,21 @@ import java.util.function.Function;
  * has obstacles and enemies
  * need get keys to unlock doors
  */
-public class BattleRoom extends Room{
+public class BattleRoom extends Room {
 
     // ----- obstacles classes ------
     private int numEnemey = 0;
     private List<Entity> entities = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
+    private List<Entity> toRemoveEntities = new ArrayList<>();
+    private List<Enemy> toRemoveEnemies = new ArrayList<>();
 
     // ---- constructor -----
 
     /**
      * create a battle room that has obstacles and enemies
-     * @param index is the current room index this battle room is in the dungeon
+     *
+     * @param index  is the current room index this battle room is in the dungeon
      * @param roomId is which battle room is this, a or b
      */
     public BattleRoom(int index, String roomId) {
@@ -66,7 +69,7 @@ public class BattleRoom extends Room{
 
         // ----- obstacles placements -----
         String[] treasureInfo = config.getTreasureInfo(treasureKey);
-        for (String info: treasureInfo) {
+        for (String info : treasureInfo) {
             entities.add(createTreasure(info));
         }
 
@@ -111,22 +114,20 @@ public class BattleRoom extends Room{
     }
 
 
-
-
-
-
     // ----- render ----
 
     @Override
     public void render() {
         super.render();
 
-        for (Entity entity: entities) {
+        for (Entity entity : entities) {
             entity.render();
         }
 
         if (allDoorLocked()) {
-            for (Enemy enemy: enemies) {enemy.render();}
+            for (Enemy enemy : enemies) {
+                enemy.render();
+            }
         }
     }
 
@@ -138,7 +139,7 @@ public class BattleRoom extends Room{
         Player playerSelf = player.getPlayer();
 
         // trigger collisions events if collides
-        for (Collidable collidable: entities) {
+        for (Collidable collidable : entities) {
             if (collidable.collidesWith(playerSelf)) {
                 collidable.triggerCollisionEvent(playerSelf);
                 collidable.tryInteract(input, playerSelf);
@@ -148,8 +149,8 @@ public class BattleRoom extends Room{
 
         List<Projectile> toRemove = new ArrayList<>();
 
-        for (Projectile projectile: getProjectiles()) {
-            for (Entity entity: entities) {
+        for (Projectile projectile : getProjectiles()) {
+            for (Entity entity : entities) {
                 if (projectile.collidesWith(entity)) {
                     projectile.triggerCollisionEvent(entity);
                     if (!projectile.isActive()) {
@@ -192,4 +193,25 @@ public class BattleRoom extends Room{
         return new TreasureBox(info);
     }
 
+    // --- getters ----
+
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public List<Entity> getToRemoveEntities() {
+        return toRemoveEntities;
+    }
+
+    public List<Enemy> getToRemoveEnemies() {
+        return toRemoveEnemies;
+    }
 }
+
+
+

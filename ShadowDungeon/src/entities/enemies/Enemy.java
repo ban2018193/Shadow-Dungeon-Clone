@@ -2,12 +2,14 @@ package entities.enemies;
 
 import bagel.util.Point;
 import entities.Entity;
+import entities.objects.projectiles.Bullet;
 import entities.objects.projectiles.Projectile;
 import entities.player.Player;
+import rooms.BattleRoom;
+import rooms.Room;
 
 public abstract class Enemy extends Entity {
 
-    private boolean isDefeated = false;
     private double health;
     private int coins;
     private final double damage = 0.2;
@@ -18,9 +20,11 @@ public abstract class Enemy extends Entity {
 
 
     @Override
-    public void attackedByProjectile(Projectile proj) {
-        // --- to be implement
-        return;
+    public boolean attackedByProjectile(Projectile projectile, Player player) {
+        if (projectile instanceof Bullet) {
+            health -= projectile.getDamage();
+        }
+        return true;
     }
 
     @Override
@@ -30,27 +34,15 @@ public abstract class Enemy extends Entity {
         }
     }
 
-    public void takeDamage() {
-
-    }
-
     @Override
-    public void render() {
-        if (!isDefeated) {
-            super.render();
+    public void deleteInactive(Room currRoom) {
+        if (!isActive() && currRoom instanceof BattleRoom room) {
+            room.getToRemoveEnemies().add(this);
         }
     }
 
+
     // ---- getters ---
-
-    @Override
-    public boolean isAttackable(Projectile projectile) {
-        return true;
-    }
-
-    public boolean isDefeated() {
-        return isDefeated;
-    }
 
     // --- setters ----
 

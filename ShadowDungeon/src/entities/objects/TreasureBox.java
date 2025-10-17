@@ -4,6 +4,7 @@ import bagel.Input;
 import bagel.Keys;
 import entities.Entity;
 import entities.player.Player;
+import entities.player.PlayerStats;
 import utils.IOUtils;
 
 
@@ -41,7 +42,7 @@ public class TreasureBox extends Entity {
             return; // do nothing if it's alr opened, or player's not touching it
         }
         isUsed = true;
-        player.gainCoin(coinValue, this);
+        PlayerStats.gainCoin(coinValue);
     }
 
     // ----- rendering -----

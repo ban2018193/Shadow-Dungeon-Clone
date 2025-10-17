@@ -20,8 +20,6 @@ import rooms.Room;
 public class Player extends Entity implements Shootable {
 
     // ------ player stats -----
-    private double health;
-    private double coins;
     private double damage = getConfig().FIREBALL_DAMAGE;
     private boolean choseChar = false;
     private double firingRate = getConfig().BULLET_FREQ;
@@ -36,32 +34,17 @@ public class Player extends Entity implements Shootable {
     public Player() {
         super(GameConfig.getInstance().PLAYER_START_POS, "res/player_right.png");
         GameConfig config = GameConfig.getInstance();
-        this.health = config.INITIAL_HEALTH;
-        this.coins = config.INITIAL_COINS;
-
     }
 
     public Player(Player player, String imagePath) {
         super(player.getPosition(), imagePath);
-        this.health = player.health;
-        this.coins = player.coins;
     }
 
     // ------ movements -----
-    public void gainDamage(double damage, Entity entity) {
-        if (health > 0) {
-            health -= damage;
-        }
-    }
 
-
-    public void gainCoin(double amount, Entity entity) {
-        coins += amount;
-    }
 
     // ----- getters -----
-    public double getHealth() {return health;}
-    public double getCoins() {return coins;}
+
 
     public Image getPlayerR() {
         return playerR;
@@ -76,13 +59,6 @@ public class Player extends Entity implements Shootable {
     }
 
     // ---- setters ----
-    public void updateHealth(double health) {
-        this.health += health;
-    }
-
-    public void updateCoins(double coins) {
-        this.coins += coins;
-    }
 
     public void setPlayerR(String path) {
         this.playerR = new Image(path);
@@ -122,4 +98,16 @@ public class Player extends Entity implements Shootable {
     public void updateFramesSinceLast() {
        framesSinceLast++;
     }
+
+
+    public void gainCoin(double amount, Entity entity) {
+        PlayerStats.gainCoin(amount);
+    }
+
+    public void gainDamage(double damage, Entity entity) {
+        if (PlayerStats.getHealth() > 0) {
+            PlayerStats.gainDamage(damage);
+        }
+    }
+
 }

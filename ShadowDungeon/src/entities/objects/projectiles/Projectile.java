@@ -4,11 +4,12 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 import bagel.util.Vector2;
 import entities.Entity;
+import rooms.BattleRoom;
+import rooms.Room;
 
 public abstract class Projectile extends Entity {
     private double speed;
     private final Vector2 moveDir;
-    private boolean isActive = true;
     private double damage;
 
     /**
@@ -67,6 +68,7 @@ public abstract class Projectile extends Entity {
     @Override
     public void triggerCollisionEvent(Entity entity){
         if (entity.isBlockable()) {
+            entity.attackedByProjectile(this);
             deactivate();
         }
     }
@@ -93,13 +95,20 @@ public abstract class Projectile extends Entity {
     }
 
     public void deactivate() {
-        isActive = false;
+        setActive(false);
     }
 
     @Override
     public boolean isBlockable() {
         // Bullets don't block movement
         return false;
+    }
+
+    @Override
+    public void deleteInactive(Room currRoom) {
+        if (!isActive() && currRoom instanceof BattleRoom room) {
+            room.getToRemoveEntities().add(this);
+        }
     }
 
     // --- setter ---
@@ -117,7 +126,4 @@ public abstract class Projectile extends Entity {
         return damage;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
 }

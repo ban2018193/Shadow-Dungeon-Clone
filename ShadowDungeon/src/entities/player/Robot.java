@@ -18,7 +18,7 @@ public class Robot extends Player{
     @Override
     public void gainCoin(double amount, Entity entity) {
         if (entity instanceof KeyBulletKin) {
-            updateCoins(amount + BONUS_COINS);
+            PlayerStats.gainCoin(amount + BONUS_COINS);
         }
     }
 

@@ -7,6 +7,8 @@ import config.GameConfig;
 import entities.capabilities.Collidable;
 import entities.objects.projectiles.Projectile;
 import entities.player.Player;
+import rooms.BattleRoom;
+import rooms.Room;
 
 
 /**
@@ -20,6 +22,7 @@ public abstract class Entity implements Collidable {
     // ---- entity basic settings ----
     private Point position;
     private Image image;
+    private boolean isActive = true;
 
     // ----- constructor ----
 
@@ -44,7 +47,9 @@ public abstract class Entity implements Collidable {
 
     // ----- render this entity  ----
     public void render() {
-        image.draw(position.x, position.y);
+        if (isActive) {
+            image.draw(position.x, position.y);
+        }
     }
 
     // ---- collidable ----
@@ -57,15 +62,19 @@ public abstract class Entity implements Collidable {
     public void triggerCollisionEvent(Entity entity) {
     }
 
-    @Override
-    public void attackedByProjectile(Projectile proj) {
-        return;
-    }
+
 
 
     @Override
     public void tryInteract(Input input, Player player) {
-        return;
+    }
+
+    // by default, if not active, delete from entities
+    @Override
+    public void deleteInactive(Room currRoom) {
+        if (!isActive && currRoom instanceof BattleRoom room) {
+           room.getToRemoveEntities().add(this);
+        }
     }
 
 
@@ -78,8 +87,15 @@ public abstract class Entity implements Collidable {
         return config;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
     // ---- setters ----
     public void setImage(Image image) {this.image = image;}
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
 }

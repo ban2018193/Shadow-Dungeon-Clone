@@ -27,11 +27,6 @@ public class River extends Entity {
     // ----- interactions ----
 
     @Override
-    public boolean isAttackable(Projectile projectile) {
-        return false;
-    }
-
-    @Override
     public boolean isBlockable() {
         return false;
     }
