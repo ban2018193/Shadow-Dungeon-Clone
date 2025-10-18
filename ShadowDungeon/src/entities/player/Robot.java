@@ -1,7 +1,11 @@
 package entities.player;
 
 import entities.Entity;
+import entities.enemies.BulletKin;
 import entities.enemies.KeyBulletKin;
+import entities.objects.projectiles.Bullet;
+
+import javax.swing.*;
 
 public class Robot extends Player{
 
@@ -17,8 +21,10 @@ public class Robot extends Player{
 
     @Override
     public void gainCoin(double amount, Entity entity) {
-        if (entity instanceof KeyBulletKin) {
+        if (entity instanceof BulletKin) {
             getPlayerStats().gainCoin(amount + BONUS_COINS);
+        } else {
+            getPlayerStats().gainCoin(amount);
         }
     }
 

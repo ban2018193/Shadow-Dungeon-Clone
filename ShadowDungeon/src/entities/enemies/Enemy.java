@@ -11,7 +11,7 @@ import rooms.Room;
 public abstract class Enemy extends Entity {
 
     private double health;
-    private int coins;
+    private int coins = 0;
     private final double damage = 0.2;
 
     public Enemy(Point position, String imagePath) {
@@ -25,7 +25,9 @@ public abstract class Enemy extends Entity {
             health -= projectile.getDamage();
             if (health <= 0) {
                 setActive(false);
+                player.gainCoin(coins, this);
             }
+
         }
         return true;
     }
