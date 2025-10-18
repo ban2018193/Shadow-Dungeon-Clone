@@ -28,7 +28,6 @@ import java.util.function.Function;
 public class BattleRoom extends Room {
 
     // ----- obstacles classes ------
-    private int numEnemey = 0;
     private List<Entity> entities = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Entity> toRemoveEntities = new ArrayList<>();
@@ -174,9 +173,16 @@ public class BattleRoom extends Room {
             enemy.deleteInactive(this);
         }
 
+        defeatedEnemy(toRemoveEnemies.size());
+
         getProjectiles().removeAll(getToRemoveProj());
         enemies.removeAll(toRemoveEnemies);
         entities.removeAll(toRemoveEntities);
+
+        if (getEnemies().isEmpty() && getNumOfDoors() > 0) {
+            roomCleared();
+        }
+
 
 
     }
@@ -194,12 +200,14 @@ public class BattleRoom extends Room {
         List<Enemy> enemies = new ArrayList<>();
         for (Point pos : poss) {
             enemies.add(new BulletKin(pos, ashen));
+            addEnemy();
         }
         return enemies;
     }
 
     public KeyBulletKin createKeyBulletKin(Point[] poss) {
         List<Point> route = new ArrayList<>(Arrays.asList(poss));
+        addEnemy();
         return new KeyBulletKin(route);
     }
 

@@ -33,6 +33,7 @@ public abstract class  Room {
 
     // ----- background -----
     private final Image background = new Image("res/background.png");
+    private int numEnemy = 0;
 
     // ----- constructor -----
 
@@ -199,7 +200,7 @@ public abstract class  Room {
         numOfDoors++;
     }
 
-    // unlock all the doors in the room if all keys are obtained
+    // unlock all the doors in the room if all enemies are defeated
     public void roomCleared() {
         for (int i = 0; i < numOfDoors; i++) {
             doors.get(i).setUnlocked(true);
@@ -240,5 +241,13 @@ public abstract class  Room {
     // ----- update -----
     public void updateNumOfDoors() {
         this.numOfDoors++;
+    }
+
+    public void defeatedEnemy(int amount) {
+        numEnemy -= amount;
+    }
+
+    public void addEnemy() {
+        numEnemy++;
     }
 }
