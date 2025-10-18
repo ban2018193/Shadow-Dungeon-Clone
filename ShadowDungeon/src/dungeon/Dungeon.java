@@ -1,7 +1,6 @@
 package dungeon;
 
 import bagel.*;
-import bagel.util.Point;
 
 import rooms.*;
 import entities.player.*;
@@ -10,84 +9,95 @@ import stores.Store;
 
 
 /**
- * dungeon acts as the control centre
- * handle room managements, and initializing the game itself
+ * The Dungeon class acts as the control centre of the game
+ * Handles room management, player progress, and game initialization
  */
 public class Dungeon {
 
-    // ----- defaults -----
+    // ----- Defaults -----
     public final GameConfig config = GameConfig.getInstance();
     private final int START_ROOM = 0;
     private final int END_ROOM;
 
-    // ----- dungeon info -----
+    // ----- Dungeon info -----
     private final Room[] rooms;
-    private final int totalRooms;
     private Room activeRoom;
     private boolean hasLost = false;
-    private Store store = new Store();
+    private final Store store = new Store();
 
-    // ---- the game stats of the player ----
-    private final PlayerCharacter player;
+    // ---- Player info ----
+    private final PlayerCharacter playerChar;
 
 
 
-    // ---- constructor -----
+    // ---- Constructor -----
 
     /**
-     * create a dungeon with rooms inside, initialize all the stats for a new game
-     * @param rooms the rooms to be included in the dungeon, not empty
+     * Creates a dungeon with the given rooms
+     * @param rooms The rooms that make up the dungeon
      */
     public Dungeon(Room[] rooms) {
         this.rooms = rooms;
-        this.totalRooms = rooms.length;
         this.activeRoom = rooms[START_ROOM];
-
-
-        this.player = new PlayerCharacter();
+        this.playerChar = new PlayerCharacter();
         this.END_ROOM = rooms.length - 1;
     }
 
-    // ----- moving between rooms ----
+    // ----- Room transitions -----
 
-    // move to the room according to its index in dungeon
+    /**
+     * Moves the player to a room based on room index in the dungeon
+     * @param roomIndex The index of the room to move to
+     */
     public void moveToRoom(int roomIndex) {
         activeRoom = rooms[roomIndex];
     }
 
-    // check if player has lost the game or not, move to end room if lost
+    /**
+     * Checks if the player has lost (health <= 0)
+     * If lost, move to the end room
+     */
     public void checkIfLost() {
-        Player playerSelf = player.getPlayer();
-        PlayerStats playerStats = playerSelf.getPlayerStats();
+        Player player = playerChar.getPlayer();
+        PlayerStats playerStats = player.getPlayerStats();
         if (playerStats.getHealth() <= 0) {
             ((EndRoom)rooms[END_ROOM]).setLostStatus(true);
-            if (!hasLost) {
-                playerSelf.movePosition(config.PLAYER_START_POS);
+            if (!hasLost) { // Only fix location for first called lost
+                player.movePosition(config.PLAYER_START_POS);
             }
             hasLost = true;
             moveToRoom(END_ROOM);
         }
     }
 
-    // ----- rendering the whole dungeon -----
+    // ----- Rendering -----
 
-    // ----- main render -----
+    /**
+     * Renders everything on screen:
+     * the current room, player stats, and the player itself
+     */
     public void render() {
-        Player playerChar = player.getPlayer();
-        activeRoom.render(); // render the current active room
-        playerChar.getPlayerStats().renderStat(); // render thet current stats of the player
-        playerChar.render(); // finally render the character moving around
+        Player player = playerChar.getPlayer();
+        activeRoom.render(); // Render the current active room
+        player.getPlayerStats().renderStat(); // Render thet current stats of the player
+        player.render(); // Finally render the character moving around
     }
 
-    // ---- updating frames -----
+    // ----- Updating -----
+
+    /**
+     * Updates the dungeon each frame
+     *
+     * @param input The current keyboard/mouse input
+     */
     public void update(Input input) {
         render();
-        if (!store.openStore(input, player.getPlayer())) {
-            activeRoom.update(player, input, this);
+
+        // Pause updates of stats of all objects when store is opened
+        if (!store.openStore(input, playerChar.getPlayer())) {
+            activeRoom.update(playerChar, input, this);
         }
         checkIfLost();
-
-
     }
 
 }

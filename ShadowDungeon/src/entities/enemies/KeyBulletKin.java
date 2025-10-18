@@ -1,32 +1,36 @@
 package entities.enemies;
 
 import bagel.util.Point;
+import java.util.ArrayList;
+import java.util.List;
+
 import entities.objects.Key;
 import entities.player.Player;
-import rooms.BattleRoom;
-import rooms.Room;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import rooms.*;
 
 
 /**
- * key bullet kin: children of entity class
- * upon touch, get defeated and gain keys to unlock the doors
- * only render once player left doors
+ * KeyBulletKin: Enemy that drops a key when defeated
+ * Has a route to travel
  */
 public class KeyBulletKin extends Enemy {
 
-    // ---- status -----
+    // ---- Setting -----
     private int movingSpeed = getConfig().KEY_BULLET_KIN_SPEED;
+
+    // ---- Routes ----
     private List<Point> route = new ArrayList<>();
     private int routeSize;
     private int currentDesIdx = 0;
 
-    // ----- constructor -----
-    public KeyBulletKin(List<Point> route) {
+    // ----- Constructor -----
 
+    /**
+     * Creates a KeyBulletKin enemy at the starting point of  route.
+     *
+     * @param route List of points of location where the enemy will go thru
+     */
+    public KeyBulletKin(List<Point> route) {
         super(route.get(0), "res/key_bullet_kin.png");
         setHealth(getConfig().KEY_BULLET_KIN_HEALTH);
         this.route = route;
@@ -34,8 +38,14 @@ public class KeyBulletKin extends Enemy {
 
     }
 
-    // ------ interactions -----
+    // ------ Behaviours -----
 
+    /**
+     * Moves the enemy automatically according to the route
+     *
+     * @param room The current room where the enemy is
+     * @param player The player information
+     */
     @Override
     public void autoPilot(Room room, Player player) {
        Point currentDes = route.get(currentDesIdx);
@@ -45,9 +55,11 @@ public class KeyBulletKin extends Enemy {
        autoMove(route.get(currentDesIdx));
     }
 
+
     /**
-     * move key bullet kin to the new position
-     * @param towards is the destination goal
+     * Move enemy toward target point
+     *
+     * @param towards Destination point
      */
     public void autoMove(Point towards) {
         Point position = getPosition();
@@ -55,29 +67,30 @@ public class KeyBulletKin extends Enemy {
         double dx = towards.x - position.x;
         double dy = towards.y - position.y;
 
-        // compute distance
+        // Compute distance
         double distance = Math.sqrt(dx*dx + dy*dy);
 
-        // if already at the target, do nothing
+        // If already at the target, do nothing
         if (distance == 0) return;
 
-        // compute step scaled by movingSpeed
+        // Compute step scaled by movingSpeed
         double stepX = movingSpeed * dx / distance;
         double stepY = movingSpeed * dy / distance;
 
-        // new position
+        // New position
         double x = position.x + stepX;
         double y = position.y + stepY;
-
-        // prevent overshooting
-
-        if (Math.abs(x - towards.x) < movingSpeed)  x = towards.x;
-        if (Math.abs(y - towards.y) < movingSpeed)  y = towards.y;
 
         movePosition(new Point(x, y));
     }
 
 
+    /**
+     * Marks for removal from the room if inactive and
+     * spawns a key at current position
+     *
+     * @param currRoom The current room
+     */
     public void deleteInactive(Room currRoom) {
         if (!isActive() && currRoom instanceof BattleRoom room) {
             room.getToRemoveEnemies().add(this);

@@ -9,10 +9,11 @@ import entities.player.Player;
 
 
 /**
- * door: exists within rooms
- * manage rooms connection, one door access to two sides (A, B)
- * 1st is A (enter from cleared stage), 2nd is B (exit to new stage)
- * handles collision, player interactions and rendering
+ * Represents a door connecting two rooms in the game.
+ *
+ * A door has two sides (Room A and Room B) and can be locked or unlocked.
+ * It handles collision detection with the player, interaction logic, and rendering.
+ * Doors can auto-lock if the stage is not cleared, and manage player entry between rooms.
  */
 public class Door extends Entity {
 
@@ -42,9 +43,10 @@ public class Door extends Entity {
     // ---- constructor -----
 
     /**
-     * initilize a new door
-     * @param rooms the rooms door connected. 1st is A (enter from cleared stage), 2nd is B (exit to new stage)
-     * @param startXY positions of doors in each room. 1st is position in room A, 2nd is position in room B
+     * Creates a new door connecting two rooms.
+     *
+     * @param rooms   an array of two rooms this door connects; first is Room A, second is Room B
+     * @param startXY positions of the door in each room; first for Room A, second for Room B
      */
     public Door(Room[] rooms, Point[] startXY) {
         super(startXY[0],"res/locked_door.png" );
@@ -56,7 +58,11 @@ public class Door extends Entity {
         }
     }
 
-    // updates currentDoorSide based on which room the player is in
+    /**
+     * Updates which side of the door the player is currently at.
+     *
+     * @param currentRoom the room the player is currently in
+     */
     public void updateCurrentDoorSide(Room currentRoom) {
         if (rooms[0] == currentRoom) currentDoor= DoorSide.ROOM_A;
         else if (rooms[1] == currentRoom) currentDoor = DoorSide.ROOM_B;
@@ -68,7 +74,14 @@ public class Door extends Entity {
         return side == DoorSide.ROOM_A ? 0 : 1;
     }
 
-    // check if player collides with door
+    // --- handles interactions ----
+    /**
+     * Checks if the player collides with the door in the current room.
+     *
+     * @param player      the player to check
+     * @param currentRoom the current room the player is in
+     * @return true if the player intersects the door's bounding box
+     */
     public boolean collidesWith(Player player, Room currentRoom) {
         updateCurrentDoorSide(currentRoom);
         int doorIndex = sideToIndex(currentDoor);
@@ -82,11 +95,19 @@ public class Door extends Entity {
 
     // ---- manage auto locks -----
 
+    /**
+     * Disables the door's auto-locking feature for the current side.
+     */
     public void disableAutoLock() {
         this.stageNotClear[sideToIndex(currentDoor)] = false;
     }
 
-    // auto lock the door once player left door if stage is not clear + auto lock is turned on
+
+    /**
+     * Automatically locks the door if the stage is not cleared and the player has left its area.
+     *
+     * @param player the player in the room
+     */
     public void autoLock(Player player) {
         int sideIndex = sideToIndex(currentDoor);
         if (stageNotClear[sideIndex]
@@ -100,7 +121,11 @@ public class Door extends Entity {
 
     // ----- move room logic method ----
 
-    // get next room door spawning location
+    /**
+     * Returns the spawn location for the room connected to the door.
+     *
+     * @return the spawn point for the destination room
+     */
     public Point getSpawnLocation() {
         // find spawning location for next room this door connects to
         DoorSide destination = (currentDoor == DoorSide.ROOM_A) ? DoorSide.ROOM_B : DoorSide.ROOM_A;
@@ -108,10 +133,11 @@ public class Door extends Entity {
     }
 
     /**
-     * handles player entering the door
-     * @param player player's physical box
-     * @param currentRoom the current room this door is in
-     * @return destination room index if successfully entered, otherwise return FAILED
+     * Handles the player entering the door and returns the destination room index.
+     *
+     * @param player      the player attempting to enter
+     * @param currentRoom the room the player is currently in
+     * @return the index of the destination room if entry succeeds, otherwise -1
      */
     public int enterDoor(Player player, Room currentRoom) {
         // find current door side
@@ -133,7 +159,15 @@ public class Door extends Entity {
         return FAILED;
     }
 
-    // ----- rendering purpose ----
+    // ----- render ----
+
+    /**
+     * Renders the door in the current room.
+     *
+     * The door image is updated based on its locked/unlocked state.
+     *
+     * @param currentRoom the room to render the door in
+     */
     public void render(Room currentRoom) {
 
         updateCurrentDoorSide(currentRoom);
@@ -149,6 +183,12 @@ public class Door extends Entity {
 
 
     // ----- getters ----
+
+    /**
+     * Determines if the door blocks player movement.
+     *
+     * @return true if the door is locked, false if it is unlocked
+     */
     @Override
     public boolean isBlockable() {
         return !isUnlocked;
@@ -159,8 +199,18 @@ public class Door extends Entity {
 
     // ---- setters ----
 
+    /**
+     * Sets the door's unlocked status.
+     *
+     * @param unlocked true to unlock the door, false to lock it
+     */
     public void setUnlocked(boolean unlocked) {isUnlocked = unlocked;}
 
+    /**
+     * Sets whether the stage on the current side of the door is cleared or not.
+     *
+     * @param stageNotClear true if the stage is not cleared, false if it is cleared
+     */
     public void setStageNotClear(boolean stageNotClear) {
         this.stageNotClear[sideToIndex(currentDoor)] = stageNotClear;
     }

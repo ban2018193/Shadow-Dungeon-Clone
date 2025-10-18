@@ -1,17 +1,16 @@
 package stores;
 
-import bagel.Image;
-import bagel.Input;
-import bagel.Keys;
+import bagel.*;
 import bagel.util.Point;
 import config.GameConfig;
-import dungeon.Dungeon;
-import entities.player.Player;
-import entities.player.PlayerStats;
-
-import javax.print.attribute.standard.MediaSize;
+import entities.player.*;
 
 
+/**
+ * Represents a store in the game where players can purchase health or upgrade weapons.
+ * The store can be opened or closed with a specific input key.
+ * Handles rendering the store and processing player interactions.
+ */
 public class Store {
 
     // ----- fields -----
@@ -21,21 +20,22 @@ public class Store {
 
     // ----- constants -----
     private final int ADVANCE_W = 1;
-    private final int ADVANCE_D;    // cost to upgrade weapon
+    private final int ADVANCE_D;
     private final int ELITE_W = 2;
-    private final int ELITE_D; // cost for elite weapon
-    private final int BONUS_H;      // bonus health restored
-    private final int HEALTH_COST;   // cost to restore health
+    private final int ELITE_D;
+    private final int HEALTH_COST;
     private final int WEAPON_COST;
-    private final int HEALTH_RESTORE;// cost per weapon upgrade
+    private final int HEALTH_RESTORE;
 
     private Image image = new Image("res/store.png");
     private Point imageXY = config.STORE_POS;
 
+    /**
+     * Creates a Store object, initializing costs and bonuses from the game configuration.
+     */
     public Store() {
         ADVANCE_D = config.WEAPON_ADVANCE_DAMAGE;
         ELITE_D = config.WEAPON_ELITE_DAMAGE;
-        BONUS_H = config.HEALTH_BONUS;
         HEALTH_COST = config.HEALTH_PURCHASE;
         WEAPON_COST = config.WEAPON_PURCHASE;
         HEALTH_RESTORE = config.HEALTH_BONUS;
@@ -46,10 +46,12 @@ public class Store {
     // ----- public methods -----
 
     /**
-     * Opens the store if input triggers it. stop other movement when returns true
+     * Opens or closes the store based on player input.
+     * While open, processes actions like purchasing health or upgrading weapons.
      *
-     * @param input the player's input
-     * @return true if store is opened
+     * @param input  the player's input
+     * @param player the player interacting with the store
+     * @return true if the store is currently opened
      */
     public boolean openStore(Input input, Player player) {
         // For example: check if a specific key is pressed to open store
@@ -65,6 +67,7 @@ public class Store {
         return isOpened;
     }
 
+    // the actions made by the player through input on store
     private void actions(Input input, Player player) {
         if (input.wasPressed(Keys.E)) {
             purchaseHealth(player);
@@ -81,16 +84,17 @@ public class Store {
         PlayerStats playerStats = player.getPlayerStats();
         if (playerStats.getWeaponLevel() < MAX_W_LVL && player.spendCoin(WEAPON_COST)) {
             playerStats.updateWeapon();
+
+            // update weapon damage according to level
             if (playerStats.getWeaponLevel() == ELITE_W) {
-                player.updateDamage(ELITE_D);
+                player.setDamage(ELITE_D);
             } else if (playerStats.getWeaponLevel() == ADVANCE_W) {
-                player.updateDamage(ADVANCE_D);
+                player.setDamage(ADVANCE_D);
             }
         }
     }
 
     private void purchaseHealth(Player player) {
-
         if (player.spendCoin(HEALTH_COST)) {
             player.gainHealth(HEALTH_RESTORE);
         }

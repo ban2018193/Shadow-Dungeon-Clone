@@ -5,27 +5,35 @@ import bagel.Keys;
 import bagel.MouseButtons;
 import bagel.util.Point;
 import config.GameConfig;
-import entities.capabilities.Shootable;
 import rooms.Room;
-
-import javax.swing.*;
 import java.util.function.BiPredicate;
 
+/**
+ * Handles the overall control of the player in the game.
+ * This class manages player movement, direction, and shooting behavior.
+ */
 public class PlayerCharacter {
+
+    // ---- settings ----
     private Player player;
     private final int RIGHT = 0;
     private final int LEFT = 1;
-
-
-    // ---- player settings ----
     private final int movingSpeed;;
 
+    /**
+     * Creates a new controllable player with default configuration.
+     */
     public PlayerCharacter() {
         this.player = new Player();
         GameConfig config = GameConfig.getInstance();
         movingSpeed = config.MOVING_SPEED;
     }
 
+    /**
+     * Replaces the current player with another character type.
+     *
+     * @param player the new player to control
+     */
     public void changeCharacter(Player player){
         this.player = player;
 
@@ -33,7 +41,13 @@ public class PlayerCharacter {
 
 
 
-    // try (no update) to move player according to the keyboard input
+    /**
+     * Calculates the next position of the player based on keyboard input,
+     * without actually updating the position yet.
+     *
+     * @param input the current keyboard input
+     * @return the new potential position
+     */
     public Point tryInput(Input input) {
         double newX = player.getPosition().x;
         double newY = player.getPosition().y;
@@ -47,10 +61,11 @@ public class PlayerCharacter {
     }
 
     /**
-     * if the tryInput move is invalid, try to slide player to valid axis
-     * @param nextMove       the next position player trying to move to
-     * @param collisionCheck check if player collides with x, y
-     * @return Point of the new valid move
+     * Tries to find a valid movement position when the intended move collides with obstacles.
+     *
+     * @param nextMove       the intended new position
+     * @param collisionCheck a function that checks if a position collides with something
+     * @return the nearest valid movement position
      */
     public Point trySolveCollision(Point nextMove, BiPredicate<Double, Double> collisionCheck) {
         double newX = nextMove.x;
@@ -74,6 +89,11 @@ public class PlayerCharacter {
 
     // ----- updates ----
 
+    /**
+     * Updates the player's facing direction based on mouse position.
+     *
+     * @param cursor the mouse cursor position
+     */
     public void updateFacingDir(Point cursor) {
         boolean facingRight = cursor.x > player.getPosition().x;
         if (facingRight) {
@@ -83,10 +103,14 @@ public class PlayerCharacter {
         }
     }
 
-    // main update method
+    /**
+     * Main update method for player actions per frame.
+     * Handles shooting, direction changes, and cooldown updates.
+     *
+     * @param input   the player's input (keyboard + mouse)
+     * @param current the current room the player is in
+     */
     public void update(Input input, Room current) {
-
-
         updateFacingDir(input.getMousePosition());
         player.updateFramesSinceLast();
         if (input.isDown(MouseButtons.LEFT)) {
@@ -94,7 +118,13 @@ public class PlayerCharacter {
         }
     }
 
+    // ---- getters ----
 
+    /**
+     * Returns the current player being controlled.
+     *
+     * @return the current {@link Player}
+     */
     public Player getPlayer() {
         return player;
     }

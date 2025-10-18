@@ -4,12 +4,17 @@ import bagel.util.Point;
 import entities.Entity;
 
 /**
- * wall: children of entity class
- * solid obstacle, player cant move thru
+ * Wall is an object that blocks player movement and can be attacked by projectiles
  */
 public class Wall extends Entity {
 
-    // ----- constructor ----
+    // ----- Constructor ----
+
+    /**
+     * Creates a wall at the specified position
+     *
+     * @param position The location of the wall
+     */
     public Wall(Point position) {
         super(position, "res/wall.png");
     }

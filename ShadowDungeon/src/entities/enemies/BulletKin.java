@@ -3,21 +3,32 @@ package entities.enemies;
 import bagel.Image;
 import bagel.util.Point;
 import bagel.util.Vector2;
+
 import entities.capabilities.Shootable;
-import entities.objects.projectiles.Bullet;
-import entities.objects.projectiles.Fireball;
-import entities.objects.projectiles.Projectile;
+import entities.objects.projectiles.*;
 import entities.player.Player;
 import rooms.Room;
 
+/**
+ * BulletKin: Enemy that can shoot fireballs at the player.
+ * Can have a normal or "ashen" bullet kin with different stats.
+ */
 public class BulletKin extends Enemy implements Shootable {
 
+    // ---- Settings ----
     private int firingRate;
-    private Vector2 shootDir;
-    private int rechargeFireball;
-    private double damage = getConfig().FIREBALL_DAMAGE;
     private int framesSinceLast = 0;
+    private double damage = getConfig().FIREBALL_DAMAGE;
 
+    // ---- Constructor -----
+
+    /**
+     * Creates a BulletKin at a given position with corresponding type.
+     * Type can be "ashen" or "normal" bullet kin
+     *
+     * @param position the spawn position of the BulletKin
+     * @param ashen if true, creates an "ashen" bullet kin
+     */
     public BulletKin(Point position, boolean ashen) {
         super(position, "res/bullet_kin.png");
         if (ashen) {
@@ -25,10 +36,10 @@ public class BulletKin extends Enemy implements Shootable {
         }else {
             initBulletKin();
         }
-
     }
 
-    // ---creating bullet kin ----
+    // ----- Initializes normal bullet kin stats ----
+
     private void initBulletKin() {
         setHealth(getConfig().BULLET_KIN_HEALTH);
         setCoins(getConfig().BULLET_KIN_COIN);
@@ -42,19 +53,35 @@ public class BulletKin extends Enemy implements Shootable {
         this.firingRate = getConfig().ASHEN_BULLET_KIN_SHOOT_FREQUENCY;
     }
 
+    // ---- behaviours ----
+
+    /**
+     * Shoots a projectile toward the target if not in cooldown
+     *
+     * @param currRoom the room to add the projectile to
+     * @param target the position to shoot toward
+     */
     @Override
     public void shoot(Room currRoom, Point target) {
+
+        // check if its still in cool down
         if (framesSinceLast < firingRate) {
-            return; // still cooling down
+            return;
         }
         framesSinceLast = 0;
-
         Vector2 shootDir = findShootDir(target, this.getPosition());
-        Projectile proj = new Fireball(this.getPosition(), shootDir, this);
+        Projectile proj = new Fireball(this.getPosition(), shootDir, damage);
         currRoom.getProjectiles().add(proj);
 
     }
 
+    /**
+     * Auto behaviours of the bullet kin each frames
+     * Increases cooldown and try to shoot
+     *
+     * @param room the current room
+     * @param player the player to target
+     */
     @Override
     public void autoPilot(Room room, Player player) {
         framesSinceLast++;
@@ -63,7 +90,13 @@ public class BulletKin extends Enemy implements Shootable {
 
     // --- getters ----
 
+    /**
+     * Gets the damage that bullet kin can deal
+     *
+     * @return the damage value
+     */
     public double getDamage() {
         return damage;
     }
+
 }

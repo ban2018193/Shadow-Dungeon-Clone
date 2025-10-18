@@ -7,12 +7,9 @@ import config.GameConfig;
 import entities.*;
 import dungeon.Dungeon;
 import entities.enemies.*;
-import entities.capabilities.Collidable;
 import entities.objects.*;
-import entities.objects.projectiles.Bullet;
-import entities.objects.projectiles.Projectile;
+import entities.objects.projectiles.*;
 import entities.player.*;
-import rooms.objects.Door;
 
 
 import java.util.ArrayList;
@@ -22,9 +19,11 @@ import java.util.function.Function;
 
 
 /**
- * battle room: child of room entity
- * has obstacles and enemies
- * need get keys to unlock doors
+ * Represents a battle room in the dungeon.
+ *
+ * A battle room contains obstacles (like rivers, walls, tables, baskets),
+ * enemies, and treasure boxes. Players must defeat enemies and collect keys
+ * to unlock doors to progress to other rooms.
  */
 public class BattleRoom extends Room {
 
@@ -37,10 +36,11 @@ public class BattleRoom extends Room {
     // ---- constructor -----
 
     /**
-     * create a battle room that has obstacles and enemies
+     * Constructs a battle room with a given index and room identifier.
      *
-     * @param index  is the current room index this battle room is in the dungeon
-     * @param roomId is which battle room is this, a or b
+     * @param index  the index of this room within the dungeon
+     * @param roomId the identifier of the room (e.g., "a" or "b") used to load
+     *               obstacle and enemy positions from configuration
      */
     public BattleRoom(int index, String roomId) {
         super(index);
@@ -52,6 +52,12 @@ public class BattleRoom extends Room {
 
     // ----- interactions -----
 
+    /**
+     * Sets up all entities and enemies for the room based on configuration.
+     *
+     * @param roomId the identifier of the room
+     * @param config the game configuration object containing positions and properties
+     */
     private void initSetUp(String roomId, GameConfig config) {
         // name of property for positions of obstacles
         List<String> cKeys = new ArrayList<>();
@@ -95,6 +101,13 @@ public class BattleRoom extends Room {
         enemies.addAll(createBulletKin(config.getPos(eKeys.get(2)), false));
     }
 
+    /**
+     * Validates the next move of the player considering walls, doors, and other obstacles.
+     *
+     * @param player   the player character trying to move
+     * @param nextMove the next position the player wants to move to
+     * @return the validated next position the player can move to
+     */
     @Override
     public Point validateMove(PlayerCharacter player, Point nextMove) {
         // 1. check parent class validation (doors)
@@ -117,6 +130,9 @@ public class BattleRoom extends Room {
 
     // ----- render ----
 
+    /**
+     * Renders all entities, enemies, and projectiles in this room.
+     */
     @Override
     public void render() {
         super.render();
@@ -134,8 +150,17 @@ public class BattleRoom extends Room {
         renderProjectiles();
     }
 
-    // ----- update upon interactions -----
+    // ----- update -----
 
+    /**
+     * Updates the state of the room each frame.
+     * Handles projectile collisions, player interactions with entities, enemy AI,
+     * and removal of inactive objects.
+     *
+     * @param player  the player character
+     * @param input   the current input state
+     * @param dungeon the dungeon this room is part of
+     */
     @Override
     public void update(PlayerCharacter player, Input input, Dungeon dungeon) {
         super.update(player, input, dungeon);
@@ -186,16 +211,16 @@ public class BattleRoom extends Room {
         enemies.removeAll(toRemoveEnemies);
         entities.removeAll(toRemoveEntities);
 
-        if (getEnemies().isEmpty() && getNumOfDoors() > 0) {
+        if (enemies.isEmpty() && getNumOfDoors() > 0) {
             roomCleared();
         }
-
-
 
     }
 
     // ---- creating obstacles ----
-    public <T> List<T> createEntities(Point[] poss, Function<Point, T> constructor) {
+
+
+    private  <T> List<T> createEntities(Point[] poss, Function<Point, T> constructor) {
         List<T> entities = new ArrayList<>();
         for (Point pos : poss) {
             entities.add(constructor.apply(pos));
@@ -203,7 +228,7 @@ public class BattleRoom extends Room {
         return entities;
     }
 
-    public List<Enemy> createBulletKin(Point[] poss, boolean ashen) {
+    private List<Enemy> createBulletKin(Point[] poss, boolean ashen) {
         List<Enemy> enemies = new ArrayList<>();
         for (Point pos : poss) {
             enemies.add(new BulletKin(pos, ashen));
@@ -212,31 +237,29 @@ public class BattleRoom extends Room {
         return enemies;
     }
 
-    public KeyBulletKin createKeyBulletKin(Point[] poss) {
+    private KeyBulletKin createKeyBulletKin(Point[] poss) {
         List<Point> route = new ArrayList<>(Arrays.asList(poss));
         addEnemy();
         return new KeyBulletKin(route);
     }
 
-    public TreasureBox createTreasure(String info) {
+   private TreasureBox createTreasure(String info) {
         return new TreasureBox(info);
     }
 
     // --- getters ----
 
-
+    /** @return the list of all static entities in this room */
     public List<Entity> getEntities() {
         return entities;
     }
 
-    public List<Enemy> getEnemies() {
-        return enemies;
-    }
-
+    /** @return the list of entities to be removed at the end of the frame */
     public List<Entity> getToRemoveEntities() {
         return toRemoveEntities;
     }
 
+    /** @return the list of enemies to be removed at the end of the frame */
     public List<Enemy> getToRemoveEnemies() {
         return toRemoveEnemies;
     }
