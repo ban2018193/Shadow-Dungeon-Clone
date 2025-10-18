@@ -38,4 +38,8 @@ public class River extends Entity {
         }
     }
 
+    @Override
+    public boolean attackedByProjectile(Projectile proj, Player player) {
+        return false;
+    }
 }

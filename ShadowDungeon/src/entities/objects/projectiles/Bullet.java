@@ -18,8 +18,10 @@ public class Bullet extends Projectile {
 
     @Override
     public void triggerCollisionEvent(Entity entity, Player player) {
-        entity.attackedByProjectile(this, player);
-        deactivate();
+
+        if (entity.attackedByProjectile(this, player)) {
+            deactivate();
+        }
     }
 
 

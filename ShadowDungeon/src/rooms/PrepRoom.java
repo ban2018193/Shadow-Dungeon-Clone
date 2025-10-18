@@ -88,5 +88,6 @@ public class PrepRoom extends OutsideRoom {
     public void render() {
         super.render();
         renderPrep();
+        renderProjectiles();
     }
 }

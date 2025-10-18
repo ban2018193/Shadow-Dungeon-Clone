@@ -100,24 +100,42 @@ public class Player extends Entity implements Shootable {
        framesSinceLast++;
     }
 
+    public void updateDamage(int newDamage) {
+        damage = newDamage;
+    }
+
 
     public void gainCoin(double amount, Entity entity) {
-        playerStats.gainCoin(amount);
+        playerStats.updateCoin(amount);
+    }
+
+    // if false, stop spending
+    public boolean spendCoin(double amount) {
+        if (playerStats.getCoins() >= amount) {
+            playerStats.updateCoin(-amount);
+            return true;
+        }
+        return false;
     }
 
     public void gainDamage(double damage, Entity entity) {
         if (playerStats.getHealth() > 0) {
-            playerStats.gainDamage(damage);
+            playerStats.updateHealth(-damage);
         }
     }
 
+    public void gainHealth(double amount) {
+        playerStats.updateHealth(amount);
+
+    }
+
     public void gainKey() {
-        playerStats.gainKey();
+        playerStats.updateKey(true);
     }
 
     public boolean useKey() {
         if (playerStats.getKeys() > 0) {
-            playerStats.useKey();
+            playerStats.updateKey(false);
             return true;
         }
         return false;
@@ -126,5 +144,13 @@ public class Player extends Entity implements Shootable {
 
     public PlayerStats getPlayerStats() {
         return playerStats;
+    }
+
+    public void setPlayerStats(PlayerStats playerStats) {
+        this.playerStats = playerStats;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

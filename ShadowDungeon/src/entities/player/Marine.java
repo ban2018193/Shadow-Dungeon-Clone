@@ -9,6 +9,8 @@ public class Marine extends Player{
         super(player, "res/marine_right.png");
         setPlayerL("res/marine_left.png");
         setPlayerR("res/marine_right.png");
+        setPlayerStats(player.getPlayerStats());
+        setDamage(player.getDamage());
         setChoseChar(true);
     }
 
@@ -17,5 +19,7 @@ public class Marine extends Player{
         if (!(entity instanceof River)) {
             super.gainDamage(damage, entity);
         }
+
+
     }
 }

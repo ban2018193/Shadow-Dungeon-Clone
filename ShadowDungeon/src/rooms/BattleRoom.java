@@ -130,6 +130,8 @@ public class BattleRoom extends Room {
                 enemy.render();
             }
         }
+
+        renderProjectiles();
     }
 
     // ----- update upon interactions -----

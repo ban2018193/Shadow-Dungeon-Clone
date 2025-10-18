@@ -6,6 +6,7 @@ import bagel.util.Point;
 import rooms.*;
 import entities.player.*;
 import config.GameConfig;
+import stores.Store;
 
 
 /**
@@ -24,6 +25,7 @@ public class Dungeon {
     private final int totalRooms;
     private Room activeRoom;
     private boolean hasLost = false;
+    private Store store = new Store();
 
     // ---- the game stats of the player ----
     private final PlayerCharacter player;
@@ -79,9 +81,13 @@ public class Dungeon {
 
     // ---- updating frames -----
     public void update(Input input) {
-        activeRoom.update(player, input, this);
         render();
+        if (!store.openStore(input, player.getPlayer())) {
+            activeRoom.update(player, input, this);
+        }
         checkIfLost();
+
+
     }
 
 }

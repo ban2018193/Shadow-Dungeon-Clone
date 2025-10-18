@@ -72,17 +72,18 @@ public abstract class Projectile extends Entity {
      * Check if projectile is outside window boundaries
      * @return true if projectile has left the visible window area
      */
-    protected boolean isOutsideWindow() {
+    private boolean isOutsideWindow() {
         Rectangle bounds = getBoundingBox();
 
-        // Check if completely off screen on any side
-        boolean leftOfWindow = bounds.right() < 0;
-        boolean rightOfWindow = bounds.left() > getConfig().WINDOW_WIDTH;
-        boolean aboveWindow = bounds.bottom() < 0;
-        boolean belowWindow = bounds.top() > getConfig().WINDOW_HEIGHT;
+        // If any part of the projectile is outside the window, consider it hit the boundary
+        boolean hitLeft = bounds.left() <= 0;
+        boolean hitRight = bounds.right() >= getConfig().WINDOW_WIDTH;
+        boolean hitTop = bounds.top() <= 0;
+        boolean hitBottom = bounds.bottom() >= getConfig().WINDOW_HEIGHT;
 
-        return leftOfWindow || rightOfWindow || aboveWindow || belowWindow;
+        return hitLeft || hitRight || hitTop || hitBottom;
     }
+
 
     public void deactivate() {
         setActive(false);

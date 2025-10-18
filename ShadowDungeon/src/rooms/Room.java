@@ -31,6 +31,7 @@ public abstract class  Room {
     private List<Projectile> projectiles = new ArrayList<>();
     private List<Projectile> toRemoveProj = new ArrayList<>();
 
+
     // ----- background -----
     private final Image background = new Image("res/background.png");
     private int numEnemy = 0;
@@ -49,6 +50,7 @@ public abstract class  Room {
 
     // try to move player, if valid move, move player
     private void updatePlayerMovement(PlayerCharacter player, Input input) {
+
         Player playerSelf = player.getPlayer();
         player.update(input, this);
         Point nextMove = player.tryInput(input);
@@ -175,7 +177,7 @@ public abstract class  Room {
         }
     }
 
-    private void renderProjectiles() {
+    public void renderProjectiles() {
         for (Projectile projectile: projectiles) {
             projectile.render();
         }
@@ -190,7 +192,6 @@ public abstract class  Room {
     public void render(){
         renderBackground();
         renderDoors();
-        renderProjectiles();
     }
 
     // ---- door managements ---

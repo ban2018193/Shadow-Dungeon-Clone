@@ -3,7 +3,7 @@ package entities.player;
 import bagel.Font;
 import bagel.util.Point;
 import config.GameConfig;
-
+import entities.objects.Wall;
 
 
 public class PlayerStats {
@@ -37,24 +37,27 @@ public class PlayerStats {
     }
 
     // ---- setters / modifiers ----
-    public void gainCoin(double amount) {
+    public void updateCoin(double amount) {
         coins += amount;
     }
 
-    public void gainDamage(double damage) {
-        if (health > 0) {
-            health -= damage;
-            if (health < 0) health = 0;
+    public void updateHealth(double amount) {
+        health += amount;
+    }
+
+    public void updateKey(boolean gain) {
+        if (gain) {
+            keys++;
+        } else {
+            keys--;
         }
     }
 
-    public void gainKey() {
-        keys++;
+    public void updateWeapon() {
+        weaponLevel++;
     }
 
-    public void useKey() {
-        keys--;
-    }
+
 
 
     // render the stats entities in this dungeon
@@ -88,6 +91,10 @@ public class PlayerStats {
 
     public int getKeys() {
         return keys;
+    }
+
+    public int getWeaponLevel() {
+        return weaponLevel;
     }
 
     // ---- optional helper ----

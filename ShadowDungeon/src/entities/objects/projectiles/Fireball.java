@@ -22,7 +22,7 @@ public class Fireball extends Projectile{
         if (entity instanceof Player) {
             player.gainDamage(getDamage(), this);
             deactivate();
-        } else if (entity.attackedByProjectile(this, player) && !(entity instanceof Enemy)) { // pass thru enemy
+        } else if (entity.attackedByProjectile(this, player) && !(entity instanceof Enemy)) {
             deactivate();
         }
 

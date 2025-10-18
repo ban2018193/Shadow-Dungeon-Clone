@@ -84,6 +84,7 @@ public abstract class OutsideRoom extends Room{
     public void render() {
         super.render();
         renderOutside();
+        renderProjectiles();
     }
 
     // ----- setter -----

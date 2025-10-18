@@ -2,10 +2,6 @@ package entities.player;
 
 import entities.Entity;
 import entities.enemies.BulletKin;
-import entities.enemies.KeyBulletKin;
-import entities.objects.projectiles.Bullet;
-
-import javax.swing.*;
 
 public class Robot extends Player{
 
@@ -16,15 +12,17 @@ public class Robot extends Player{
         super(player, "res/robot_right.png");
         setPlayerL("res/robot_left.png");
         setPlayerR("res/robot_right.png");
+        setPlayerStats(player.getPlayerStats());
+        setDamage(player.getDamage());
         setChoseChar(true);
     }
 
     @Override
     public void gainCoin(double amount, Entity entity) {
         if (entity instanceof BulletKin) {
-            getPlayerStats().gainCoin(amount + BONUS_COINS);
+            getPlayerStats().updateCoin(amount + BONUS_COINS);
         } else {
-            getPlayerStats().gainCoin(amount);
+            getPlayerStats().updateCoin(amount);
         }
     }
 
