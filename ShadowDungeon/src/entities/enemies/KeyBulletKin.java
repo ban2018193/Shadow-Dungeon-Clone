@@ -2,6 +2,7 @@ package entities.enemies;
 
 import bagel.util.Point;
 import entities.objects.Key;
+import entities.player.Player;
 import rooms.BattleRoom;
 import rooms.Room;
 
@@ -36,7 +37,7 @@ public class KeyBulletKin extends Enemy {
     // ------ interactions -----
 
     @Override
-    public void autoPilot(Room room) {
+    public void autoPilot(Room room, Player player) {
        Point currentDes = route.get(currentDesIdx);
        if (currentDes.equals(getPosition())) {
            currentDesIdx = (currentDesIdx + 1) % routeSize;
@@ -50,21 +51,32 @@ public class KeyBulletKin extends Enemy {
      */
     public void autoMove(Point towards) {
         Point position = getPosition();
-        if (position.x < towards.x) {
-            Point newPos = new Point(position.x + movingSpeed, position.y);
-            movePosition(newPos);
-        } else if (position.y < towards.y) {
-            Point newPos = new Point(position.x, position.y + movingSpeed);
-            movePosition(newPos);
-        } else if (position.x > towards.x) {
-            Point newPos = new Point(position.x - movingSpeed, position.y);
-            movePosition(newPos);
-        } else if (position.y > towards.y) {
-            Point newPos = new Point(position.x, position.y - movingSpeed);
-            movePosition(newPos);
-        }
 
+        double dx = towards.x - position.x;
+        double dy = towards.y - position.y;
+
+        // compute distance
+        double distance = Math.sqrt(dx*dx + dy*dy);
+
+        // if already at the target, do nothing
+        if (distance == 0) return;
+
+        // compute step scaled by movingSpeed
+        double stepX = movingSpeed * dx / distance;
+        double stepY = movingSpeed * dy / distance;
+
+        // new position
+        double x = position.x + stepX;
+        double y = position.y + stepY;
+
+        // prevent overshooting
+
+        if (Math.abs(x - towards.x) < movingSpeed)  x = towards.x;
+        if (Math.abs(y - towards.y) < movingSpeed)  y = towards.y;
+
+        movePosition(new Point(x, y));
     }
+
 
     public void deleteInactive(Room currRoom) {
         if (!isActive() && currRoom instanceof BattleRoom room) {

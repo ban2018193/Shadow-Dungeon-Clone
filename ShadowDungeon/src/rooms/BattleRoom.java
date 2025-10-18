@@ -9,6 +9,7 @@ import dungeon.Dungeon;
 import entities.enemies.*;
 import entities.capabilities.Collidable;
 import entities.objects.*;
+import entities.objects.projectiles.Bullet;
 import entities.objects.projectiles.Projectile;
 import entities.player.*;
 import rooms.objects.Door;
@@ -140,6 +141,9 @@ public class BattleRoom extends Room {
 
         // projectile collide with anything (objects, enemy, or player)
         for (Projectile projectile : getProjectiles()) {
+            if (!(projectile instanceof Bullet) && projectile.collidesWith(playerSelf)) {
+                projectile.triggerCollisionEvent(playerSelf, playerSelf);
+            }
             for (Entity entity : entities) {
                 if (projectile.collidesWith(entity)) {
                     projectile.triggerCollisionEvent(entity, playerSelf);
@@ -166,7 +170,7 @@ public class BattleRoom extends Room {
 
         // defeat enemies and gain keys
         for (Enemy enemy : enemies) {
-            enemy.autoPilot(this);
+            enemy.autoPilot(this, playerSelf);
             if (enemy.collidesWith(playerSelf)) {
                 enemy.triggerCollisionEvent(playerSelf, playerSelf);
 

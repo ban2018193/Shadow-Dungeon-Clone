@@ -46,7 +46,7 @@ public abstract class Enemy extends Entity {
         }
     }
 
-    public void autoPilot(Room room) {
+    public void autoPilot(Room room, Player player) {
         return;
     }
     // ---- getters ---

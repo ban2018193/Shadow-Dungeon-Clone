@@ -19,7 +19,7 @@ public class Fireball extends Projectile{
 
     @Override
     public void triggerCollisionEvent(Entity entity, Player player) {
-        if (entity instanceof Player p && collidesWith(p)) {
+        if (entity instanceof Player) {
             player.gainDamage(getDamage(), this);
             deactivate();
         } else if (entity.attackedByProjectile(this, player) && !(entity instanceof Enemy)) { // pass thru enemy
