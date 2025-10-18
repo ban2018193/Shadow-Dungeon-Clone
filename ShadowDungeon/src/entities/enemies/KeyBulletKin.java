@@ -6,6 +6,7 @@ import rooms.BattleRoom;
 import rooms.Room;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -17,9 +18,10 @@ import java.util.List;
 public class KeyBulletKin extends Enemy {
 
     // ---- status -----
-    private boolean isDefeated = false;
     private int movingSpeed = getConfig().KEY_BULLET_KIN_SPEED;
     private List<Point> route = new ArrayList<>();
+    private int routeSize;
+    private int currentDesIdx = 0;
 
     // ----- constructor -----
     public KeyBulletKin(List<Point> route) {
@@ -27,13 +29,19 @@ public class KeyBulletKin extends Enemy {
         super(route.get(0), "res/key_bullet_kin.png");
         setHealth(getConfig().KEY_BULLET_KIN_HEALTH);
         this.route = route;
+        this.routeSize = route.size();
 
     }
 
     // ------ interactions -----
 
-    public void dropKey(BattleRoom room) {
-        // implemetn later, add key into room, take positions
+    @Override
+    public void autoPilot(Room room) {
+       Point currentDes = route.get(currentDesIdx);
+       if (currentDes.equals(getPosition())) {
+           currentDesIdx = (currentDesIdx + 1) % routeSize;
+       }
+       autoMove(route.get(currentDesIdx));
     }
 
     /**

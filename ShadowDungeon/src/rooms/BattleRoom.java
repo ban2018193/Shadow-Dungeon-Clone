@@ -166,6 +166,7 @@ public class BattleRoom extends Room {
 
         // defeat enemies and gain keys
         for (Enemy enemy : enemies) {
+            enemy.autoPilot(this);
             if (enemy.collidesWith(playerSelf)) {
                 enemy.triggerCollisionEvent(playerSelf, playerSelf);
 
