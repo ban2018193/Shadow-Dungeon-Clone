@@ -26,12 +26,8 @@ public class Dungeon {
     private boolean hasLost = false;
 
     // ---- the game stats of the player ----
-    private final String healthTitle;
-    private final String coinsTitle;
-    private final Point healthStat;
-    private final Point coinStat;
     private final PlayerCharacter player;
-    private final Font titleFont;
+
 
 
     // ---- constructor -----
@@ -45,14 +41,9 @@ public class Dungeon {
         this.totalRooms = rooms.length;
         this.activeRoom = rooms[START_ROOM];
 
-        this.healthTitle = config.HEALTH_DISPLAY;
-        this.coinsTitle = config.COIN_DISPLAY;
-        this.healthStat = config.HEALTH_STAT_POS;
-        this.coinStat = config.COIN_STAT_POS;
+
         this.player = new PlayerCharacter();
         this.END_ROOM = rooms.length - 1;
-        this.titleFont = new Font(config.FONT_PATH,
-                config.PLAYER_STATS_FONT_SIZE);
     }
 
     // ----- moving between rooms ----
@@ -78,25 +69,11 @@ public class Dungeon {
 
     // ----- rendering the whole dungeon -----
 
-    // render the stats entities in this dungeon
-    private void renderStat() {
-        PlayerStats playerStats = player.getPlayer().getPlayerStats();
-        double health = playerStats.getHealth();
-        String healthText = String.format(healthTitle + " %.1f", health);
-
-        double coins = playerStats.getCoins();
-        String coinText = String.format(coinsTitle + " %.1f", coins);
-
-        // render stats of player
-        titleFont.drawString(healthText, healthStat.x, healthStat.y);
-        titleFont.drawString(coinText, coinStat.x, coinStat.y);
-    }
-
     // ----- main render -----
     public void render() {
         Player playerChar = player.getPlayer();
         activeRoom.render(); // render the current active room
-        renderStat(); // render thet current stats of the player
+        playerChar.getPlayerStats().renderStat(); // render thet current stats of the player
         playerChar.render(); // finally render the character moving around
     }
 
