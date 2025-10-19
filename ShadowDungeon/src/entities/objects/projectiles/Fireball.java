@@ -2,24 +2,23 @@ package entities.objects.projectiles;
 
 import bagel.util.Point;
 import bagel.util.Vector2;
-
 import entities.Entity;
 import entities.enemies.*;
 import entities.player.Player;
 
 /**
- * Represents a fireball projectile fired by a BulletKin enemy.
- * Moves in a given direction and deals damage to the player or other entities.
+ * Fireball: a projectile fired by a BulletKin
+ * Moves in a given direction and deals damage to the player
  */
 public class Fireball extends Projectile{
 
-    // ---- constructor ----
+    // ---- Constructor ----
 
     /**
-     * Creates a fireball at a specific position and direction.
+     * Creates a fireball at a specific position and direction
      *
      * @param position starting position of the fireball
-     * @param dir normalized vector representing the direction of movement
+     * @param dir normalized vector of the direction of movement
      * @param damage the damage this fireball contains
      */
     public Fireball(Point position, Vector2 dir, double damage) {
@@ -28,19 +27,20 @@ public class Fireball extends Projectile{
         setDamage(damage);
     }
 
-    // ---- handle interactions ----
+
+    // ---- Handle interactions ----
 
     /**
-     * Called when the fireball collides with an entity.
-     * If the entity is the player, it takes damage and the fireball is deactivated.
-     * If the entity is not an enemy and can be attacked by projectiles, deactivate the fireball.
+     * Trigger consequences after collide with an entity
+     * If the entity is the player, player takes damage
+     * If the entity is not an enemy and can be attacked, deactivate the fireball
      *
      * @param entity the entity that the fireball collided with
      * @param player the player in the game
      */
     @Override
     public void triggerCollisionEvent(Entity entity, Player player) {
-        if (entity instanceof Player) {
+        if (entity instanceof Player) { // Player lost health if collides with fireball
             player.gainDamage(getDamage(), this);
             deactivate();
         } else if (entity.attackedByProjectile(this, player) && !(entity instanceof Enemy)) {

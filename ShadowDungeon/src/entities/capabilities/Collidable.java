@@ -21,6 +21,7 @@ public interface Collidable{
      */
     public boolean collidesWith(Player player);
 
+
     /**
      * When collision occurs, entity do consequence actions
      *
@@ -42,6 +43,7 @@ public interface Collidable{
         return true;
     }
 
+
     /**
      * Determines if this object blocks player movement (default is true)
      *
@@ -53,12 +55,13 @@ public interface Collidable{
 
 
     /**
-     * Handles player input interaction with this object
+     * Handles player input interaction attempts with this object
      *
      * @param input the current input
      * @param player the player interacting
      */
     public void tryInteract(Input input, Player player);
+
 
     /**
      * Add object that are not active into a buffer list in room to be deleted

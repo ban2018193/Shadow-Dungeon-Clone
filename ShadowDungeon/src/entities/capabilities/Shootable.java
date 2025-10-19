@@ -12,8 +12,8 @@ public interface Shootable {
     /**
      * Calc the normalized direction vector from a spawn point to a target point
      *
-     * @param target the target point to shoot at
-     * @param spawn the point where the projectile is at
+     * @param target The target point to shoot at
+     * @param spawn The point where the projectile is at
      * @return a normalized Vector2 pointing from spawn to target
      */
     default Vector2 findShootDir(Point target, Point spawn) {
@@ -21,13 +21,15 @@ public interface Shootable {
         return dir.normalised();
     }
 
+
     /**
      * Performs the shooting action in the current room
      *
-     * @param currRoom the curr room
-     * @param target the point the entity aims at
+     * @param currRoom The curr room
+     * @param target The point the entity aims at
      */
     public void shoot(Room currRoom, Point target);
+
 }
 
 

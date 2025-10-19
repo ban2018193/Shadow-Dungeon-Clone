@@ -10,6 +10,8 @@ import entities.player.Player;
  */
 public class Key extends Entity {
 
+    // ---- Constructor -----
+
     /**
      * Creates a Key at a specific position
      *
@@ -19,8 +21,9 @@ public class Key extends Entity {
         super(position, "res/key.png");
     }
 
+
     /**
-     * Keys do not block the player
+     * Keys do not block the player movements
      *
      * @return false
      */
@@ -28,6 +31,7 @@ public class Key extends Entity {
     public boolean isBlockable() {
         return false;
     }
+
 
     /**
      * Keys can't be attacked
@@ -41,9 +45,10 @@ public class Key extends Entity {
         return false;
     }
 
+
     /**
-     * Trigger consequence when an object collides with the key
-     * Key becomes inactive and player gains one key if collides with player
+     * Trigger consequence when an object collides with key
+     * Key becomes inactive and player gains a key if collides with player
      *
      * @param entity The entity that collides with this key
      * @param player The player information

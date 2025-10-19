@@ -11,16 +11,21 @@ import entities.player.Player;
  */
 public class Basket extends Entity {
 
+    private final int coins = getConfig().BASKET_COIN;
+
+    // ---- Constructor ----
+
     /**
      * Creates a Basket at a specific position
      *
      * @param position position of the basket in the game
      */
-    private final int coins = getConfig().BASKET_COIN;
-
     public Basket(Point position) {
         super(position, "res/basket.png");
     }
+
+
+    // ---- Handle interactions -----
 
     /**
      * Trigger consequences when hit by a projectile

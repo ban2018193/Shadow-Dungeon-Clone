@@ -12,8 +12,8 @@ import rooms.Room;
 
 
 /**
- * The Player can move, shoot, collect coins and keys, and take or heal damage.
- * The player’s state (health, coins, weapon levels, and keys) is tracked using PlayerStats.
+ * The Player can move, shoot, collect coins and keys, and take or heal damage
+ * The player’s state (health, coins, weapon levels, and keys) is tracked using PlayerStats
  */
 public class Player extends Entity implements Shootable {
 
@@ -30,6 +30,7 @@ public class Player extends Entity implements Shootable {
     private Image playerR = new Image("res/player_right.png");
     private Image playerL = new Image("res/player_left.png");
 
+
     // ------ Constructors -----
 
     /**
@@ -40,23 +41,26 @@ public class Player extends Entity implements Shootable {
         GameConfig config = GameConfig.getInstance();
     }
 
+
     /**
-     * Creates a new player by copying an existing player’s state.
+     * Creates a new player by copying existing player’s state
+     * (Used for switching character)
      *
-     * @param player    The player to copy position and state from
+     * @param player The player to copy position and state from
      * @param imagePath The path to the new player's image
      */
     public Player(Player player, String imagePath) {
         super(player.getPosition(), imagePath);
     }
 
+
     // ---- Shooting ----
 
     /**
-     * Fires a Bullet toward the given target if not in cooldown
+     * Fires a Bullet toward the target if not in cooldown
      *
      * @param currRoom The current room where the Bullet should be spawned
-     * @param target   The target position the Bullet is fired toward
+     * @param target The target position the Bullet is fired toward
      */
     @Override
     public void shoot(Room currRoom, Point target) {
@@ -70,6 +74,7 @@ public class Player extends Entity implements Shootable {
         }
         framesSinceLast = 0;
 
+        // Create Bullet and add into room to be managed
         Vector2 shootDir = findShootDir(target, this.getPosition());
         Projectile proj = new Bullet(this.getPosition(), shootDir, this);
         currRoom.getProjectiles().add(proj);
@@ -84,6 +89,7 @@ public class Player extends Entity implements Shootable {
        framesSinceLast++;
     }
 
+
     // ----- Stat management -----
 
     /**
@@ -96,8 +102,9 @@ public class Player extends Entity implements Shootable {
         playerStats.updateCoin(amount);
     }
 
+
     /**
-     * Attempts to spend coins
+     * Spend coins
      *
      * @param amount The number of coins to spend
      * @return true if successful, false if not enough coins
@@ -109,6 +116,7 @@ public class Player extends Entity implements Shootable {
         }
         return false;
     }
+
 
     /**
      * Applies damage to the player
@@ -141,8 +149,9 @@ public class Player extends Entity implements Shootable {
         playerStats.updateKey(true);
     }
 
+
     /**
-     * Consumes 1 key if available
+     * Consumes 1 key
      *
      * @return true if a key was successfully used, else false
      */
@@ -155,6 +164,7 @@ public class Player extends Entity implements Shootable {
 
     }
 
+
     // --- Getters ----
 
     /**
@@ -166,6 +176,7 @@ public class Player extends Entity implements Shootable {
         return playerStats;
     }
 
+
     /**
      * Get the right player image
      *
@@ -174,6 +185,7 @@ public class Player extends Entity implements Shootable {
     public Image getPlayerR() {
         return playerR;
     }
+
 
     /**
      * Get the left player image
@@ -184,6 +196,7 @@ public class Player extends Entity implements Shootable {
         return playerL;
     }
 
+
     /**
      * Check if the player has already chosen a character
      *
@@ -192,6 +205,7 @@ public class Player extends Entity implements Shootable {
     public boolean hasChoseChar() {
         return choseChar;
     }
+
 
     /**
      * Get the damage player can deal
@@ -213,6 +227,7 @@ public class Player extends Entity implements Shootable {
         this.playerR = new Image(path);
     }
 
+
     /**
      * Set the left player image
      * @param path The file path to the image
@@ -220,6 +235,7 @@ public class Player extends Entity implements Shootable {
     public void setPlayerL(String path) {
         this.playerL = new Image(path);
     }
+
 
     /**
      * Set whether the player has chosen a character
@@ -229,6 +245,7 @@ public class Player extends Entity implements Shootable {
         this.choseChar = choseChar;
     }
 
+
     /**
      * Copy PlayerStats from player into new character
      *
@@ -237,6 +254,7 @@ public class Player extends Entity implements Shootable {
     public void setPlayerStats(PlayerStats playerStats) {
         this.playerStats = playerStats;
     }
+
 
     /**
      * Updates the player's damage

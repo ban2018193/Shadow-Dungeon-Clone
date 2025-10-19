@@ -3,7 +3,6 @@ package entities.enemies;
 import bagel.util.Point;
 import java.util.ArrayList;
 import java.util.List;
-
 import entities.objects.Key;
 import entities.player.Player;
 import rooms.*;
@@ -23,10 +22,11 @@ public class KeyBulletKin extends Enemy {
     private int routeSize;
     private int currentDesIdx = 0;
 
+
     // ----- Constructor -----
 
     /**
-     * Creates a KeyBulletKin enemy at the starting point of  route.
+     * Creates a KeyBulletKin enemy at the starting point of route.
      *
      * @param route List of points of location where the enemy will go thru
      */
@@ -38,6 +38,7 @@ public class KeyBulletKin extends Enemy {
 
     }
 
+
     // ------ Behaviours -----
 
     /**
@@ -48,11 +49,19 @@ public class KeyBulletKin extends Enemy {
      */
     @Override
     public void autoPilot(Room room, Player player) {
-       Point currentDes = route.get(currentDesIdx);
-       if (currentDes.equals(getPosition())) {
-           currentDesIdx = (currentDesIdx + 1) % routeSize;
-       }
-       autoMove(route.get(currentDesIdx));
+        Point currentDes = route.get(currentDesIdx);
+
+        // Check if close enough to destination
+        double dx = currentDes.x - getPosition().x;
+        double dy = currentDes.y - getPosition().y;
+        double distance = Math.sqrt(dx*dx + dy*dy);
+
+        // If within movingSpeed distance, consider it "reached"
+        if (distance <= movingSpeed) {
+            currentDesIdx = (currentDesIdx + 1) % routeSize;
+        }
+
+        autoMove(route.get(currentDesIdx));
     }
 
 

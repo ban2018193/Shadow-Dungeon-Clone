@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * A utility class that provides methods to read and write files.
+ * A utility class that provides methods to read and write files
  */
 public class IOUtils {
     /***
@@ -30,7 +30,7 @@ public class IOUtils {
 
 
     /**
-     * Converts a string representation of coordinates into a Point object.
+     * Converts a string representation of coordinates into a Point object
      *
      * @param coords a string in the format "x,y"
      * @return a Point object with the parsed x and y coordinates
@@ -40,9 +40,10 @@ public class IOUtils {
         return new Point(Double.parseDouble(coordinates[0]), Double.parseDouble(coordinates[1]));
     }
 
+
     /**
-     * Converts a semicolon-separated list of coordinate strings into an array of Point objects.
-     * For example: "1,2;3,4" becomes an array with points (1,2) and (3,4).
+     * Converts a semicolon-separated list of coordinate strings into an array of Point objects
+     * For example: "1,2;3,4" becomes an array with points (1,2) and (3,4).\
      *
      * @param coords the string containing multiple coordinate pairs
      * @return an array of Point objects
@@ -66,7 +67,7 @@ public class IOUtils {
 
 
     /**
-     * Splits a string into an array of strings using the given delimiter.
+     * Splits a string into an array of strings using the given delimiter
      *
      * @param contents the string to split
      * @param regex the delimiter or regex to use for splitting
@@ -76,8 +77,9 @@ public class IOUtils {
         return contents.split(regex);
     }
 
+
     /**
-     * Retrieves a property value from a Properties object and converts it to a Point.
+     * Retrieves a property value from a Properties object and converts it to a Point
      *
      * @param gameProps the Properties object containing the key-value pairs
      * @param x the property key whose value represents coordinates

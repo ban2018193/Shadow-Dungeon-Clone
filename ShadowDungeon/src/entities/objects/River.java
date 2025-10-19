@@ -6,7 +6,6 @@ import entities.Entity;
 import entities.objects.projectiles.Projectile;
 import entities.player.Player;
 
-
 /**
  * River is an object that the player can pass thru
  * Deals damage to the player when player is inside
@@ -29,6 +28,7 @@ public class River extends Entity {
 
     }
 
+
     // ----- Interactions ----
 
     /**
@@ -41,8 +41,9 @@ public class River extends Entity {
         return false;
     }
 
+
     /**
-     * Trigger consequences when collide with entity.
+     * Trigger consequences when collide with entity
      * Deal damage to the player if entity is player itself
      *
      * @param entity The entity interacting with the river
@@ -54,6 +55,9 @@ public class River extends Entity {
             player.gainDamage(damage, this);
         }
     }
+
+
+    // ---- Handle interactions ----
 
     /**
      * Rivers can't be attacked by projectiles

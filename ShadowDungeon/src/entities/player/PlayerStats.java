@@ -5,20 +5,19 @@ import bagel.util.Point;
 import config.GameConfig;
 
 /**
- * Manages all player statistics such as health, coins, keys, and weapon level.
- * Responsible for updating player attributes and rendering the stats display
- * on the game screen.
+ * Manages all player statistics such as health, coins, keys, and weapon level
+ * Render the stats
  */
 public class PlayerStats {
 
-    // ---- stats ----
+    // ---- Stats ----
     private final GameConfig config = GameConfig.getInstance();
     private double health;
     private double coins;
     private int keys = 0;
     private int weaponLevel = 0;
 
-    // --- settings ----
+    // --- Settings ----
     private String healthTitle = config.HEALTH_DISPLAY;
     private String coinsTitle = config.COIN_DISPLAY;
     private String weaponTitle = config.WEAPON_DISPLAY;
@@ -30,31 +29,22 @@ public class PlayerStats {
     private Font titleFont = new Font(config.FONT_PATH,
                               config.PLAYER_STATS_FONT_SIZE);
 
+
     // ----- Constructors -----
 
     /**
-     * Creates a new PlayerStats object with default initial values.
+     * Creates a new PlayerStats object
      */
     public PlayerStats() {
         this.health = config.INITIAL_HEALTH;
         this.coins = 0;
     }
 
-    /**
-     * Creates a new PlayerStats object with specified initial health and coins.
-     *
-     * @param health Initial player health
-     * @param coins  Initial coin count
-     */
-    public PlayerStats(double health, double coins) {
-        this.health = health;
-        this.coins = coins;
-    }
 
-    // ----- update methods -----
+    // ----- Update methods -----
 
     /**
-     * Updates the player's coin balance by a given amount.
+     * Updates the player's coin amount by a given amount
      *
      * @param amount Amount to change the coin count by (can be negative)
      */
@@ -62,8 +52,9 @@ public class PlayerStats {
         coins += amount;
     }
 
+
     /**
-     * Updates the player's health by a given amount.
+     * Updates the player's health by a given amount
      *
      * @param amount Amount to change the health by (can be negative)
      */
@@ -71,8 +62,9 @@ public class PlayerStats {
         health += amount;
     }
 
+
     /**
-     * Updates the number of keys the player holds.
+     * Updates the number of keys the player holds
      *
      * @param gain True to gain a key, false to lose one
      */
@@ -84,25 +76,19 @@ public class PlayerStats {
         }
     }
 
+
     /**
-     * Increases the player's weapon level by one.
+     * Increases the player's weapon level by one
      */
     public void updateWeapon() {
         weaponLevel++;
     }
 
-    /**
-     * Resets player stats to default starting values.
-     */
-    public void reset() {
-        health = config.INITIAL_HEALTH;
-        coins = 0;
-    }
 
-    // --- renders ----
+    // --- Renders ----
 
     /**
-     * Renders the player's statistics on the screen.
+     * Renders the player's stats on the screen
      */
     public void renderStat() {
         String healthText = String.format(healthTitle + " %.1f", health);
@@ -118,31 +104,42 @@ public class PlayerStats {
     }
 
 
-    // ---- getters ----
+    // ---- Getters ----
 
     /**
-     * @return Current player health
+     * Gets the player's current health
+     *
+     * @return the current health value
      */
     public double getHealth() {
         return health;
     }
 
+
     /**
-     * @return Current player health
+     * Gets the player's current number of coins
+     *
+     * @return the current coin count
      */
     public double getCoins() {
         return coins;
     }
 
+
     /**
-     * @return Current player health
+     * Gets the player's current number of keys
+     *
+     * @return the number of keys the player holds
      */
     public int getKeys() {
         return keys;
     }
 
+
     /**
-     * @return Current player health
+     * Gets the player's current weapon level
+     *
+     * @return the weapon level (0 = basic, 1 = advance, 2 = elite)
      */
     public int getWeaponLevel() {
         return weaponLevel;

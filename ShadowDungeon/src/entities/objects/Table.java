@@ -22,6 +22,9 @@ public class Table extends Entity {
         super(position, "res/table.png");
     }
 
+
+    // ---- Handle interactions ----
+
     /**
      * Handles interactions with projectiles
      * If hit by a Bullet, the table becomes inactive (destroyed).
@@ -37,6 +40,5 @@ public class Table extends Entity {
         }
         return true;
     }
-
 
 }

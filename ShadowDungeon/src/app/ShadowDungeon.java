@@ -2,7 +2,6 @@ package app;
 
 import bagel.*;
 import bagel.util.Point;
-
 import config.GameConfig;
 import dungeon.Dungeon;
 import entities.*;
@@ -11,10 +10,9 @@ import rooms.objects.Door;
 
 
 /**
- * The main driver class for the Shadow Dungeon game
- * This class initializes and manages the game window, sets up rooms, doors, and
- * handles the main update loop. It acts as the central for the game,
- * coordinating between user input, dungeon logic, and rendering
+ * The main driver class for the game
+ * This class initializes and manages the game window, creating a dungeon and
+ * handles the main update loop
  */
 public class ShadowDungeon extends AbstractGame {
 
@@ -22,6 +20,7 @@ public class ShadowDungeon extends AbstractGame {
     public final GameConfig config = GameConfig.getInstance();
     private static ShadowDungeon instance;
     private Dungeon shadowDungeon;
+
 
     // ---- Constructor ----
 
@@ -36,6 +35,7 @@ public class ShadowDungeon extends AbstractGame {
         instance = this;
         this.shadowDungeon = new Dungeon(createRooms());
     }
+
 
     // ---- Methods -----
 
@@ -71,6 +71,7 @@ public class ShadowDungeon extends AbstractGame {
         return rooms;
     }
 
+
     // ----- Updates -----
 
     /**
@@ -87,15 +88,19 @@ public class ShadowDungeon extends AbstractGame {
         shadowDungeon.update(input);
     }
 
-    // Restarts the game by recreating a new dungeon
+
+    /**
+     * Restarts the game by recreating a new dungeon
+     */
     public static void restart() {
         instance.shadowDungeon = new Dungeon(instance.createRooms());
     }
 
+
     // ----- Main -----
 
     /**
-     * The main entry point of the Shadow Dungeon game
+     * The main entry point of the game
      * Initializes the Dungeon
      * Starts the game loop
      *
@@ -105,4 +110,5 @@ public class ShadowDungeon extends AbstractGame {
         ShadowDungeon game = new ShadowDungeon();
         game.run();
     }
+
 }

@@ -23,6 +23,7 @@ public class Marine extends Player{
         setChoseChar(true);
     }
 
+
     /**
      * Applies damage to the Marine, but immune to water
      *
@@ -34,7 +35,5 @@ public class Marine extends Player{
         if (!(entity instanceof River)) {
             super.gainDamage(damage, entity);
         }
-
-
     }
 }

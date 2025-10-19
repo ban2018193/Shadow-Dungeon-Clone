@@ -32,7 +32,8 @@ public class TreasureBox extends Entity {
         this.coinValue = Double.parseDouble(content);
     }
 
-    // ---- interactions ----
+
+    // ---- Interactions ----
 
     /**
      * Opens the treasure box and player gain coins
@@ -48,9 +49,10 @@ public class TreasureBox extends Entity {
         player.gainCoin(coinValue, this);
     }
 
+
     /**
      * Handles player interaction
-     * Player can open the box using a key (K) if colliding
+     * Player can open the box by pressing k and colliding with it
      *
      * @param input Player input
      * @param player The player interacting
@@ -62,6 +64,7 @@ public class TreasureBox extends Entity {
         }
     }
 
+
     /**
      * TreasureBox does not block movement
      *
@@ -71,6 +74,7 @@ public class TreasureBox extends Entity {
     public boolean isBlockable() {
         return false;
     }
+
 
     // ----- Rendering -----
 

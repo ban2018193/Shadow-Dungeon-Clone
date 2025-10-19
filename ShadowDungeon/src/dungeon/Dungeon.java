@@ -1,7 +1,6 @@
 package dungeon;
 
 import bagel.*;
-
 import rooms.*;
 import entities.player.*;
 import config.GameConfig;
@@ -9,7 +8,7 @@ import stores.Store;
 
 
 /**
- * The Dungeon class acts as the control centre of the game
+ * The Dungeon class is the control centre of the rooms
  * Handles room management, player progress, and game initialization
  */
 public class Dungeon {
@@ -29,11 +28,11 @@ public class Dungeon {
     private final PlayerCharacter playerChar;
 
 
-
     // ---- Constructor -----
 
     /**
      * Creates a dungeon with the given rooms
+     *
      * @param rooms The rooms that make up the dungeon
      */
     public Dungeon(Room[] rooms) {
@@ -43,15 +42,18 @@ public class Dungeon {
         this.END_ROOM = rooms.length - 1;
     }
 
+
     // ----- Room transitions -----
 
     /**
      * Moves the player to a room based on room index in the dungeon
+     *
      * @param roomIndex The index of the room to move to
      */
     public void moveToRoom(int roomIndex) {
         activeRoom = rooms[roomIndex];
     }
+
 
     /**
      * Checks if the player has lost (health <= 0)
@@ -70,6 +72,7 @@ public class Dungeon {
         }
     }
 
+
     // ----- Rendering -----
 
     /**
@@ -82,6 +85,7 @@ public class Dungeon {
         player.getPlayerStats().renderStat(); // Render thet current stats of the player
         player.render(); // Finally render the character moving around
     }
+
 
     // ----- Updating -----
 

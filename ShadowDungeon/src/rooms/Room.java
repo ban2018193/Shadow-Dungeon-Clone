@@ -8,36 +8,33 @@ import entities.Entity;
 import entities.objects.projectiles.Projectile;
 import entities.player.PlayerCharacter;
 import rooms.objects.Door;
-
 import entities.player.Player;
 import dungeon.Dungeon;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract base class for all rooms in the dungeon.
- * Handles player movement, collision detection, projectiles, and door interactions.
+ * Abstract base class for all rooms in the dungeon
+ * Handles player movement, collision detection, projectiles, and door interactions
  */
 public abstract class  Room {
 
+    // ----- Room stats -----
     private final GameConfig config = GameConfig.getInstance();
-
-    // ----- room stats -----
     private final int index; // stage of room is in dungeon
     private final Image background = new Image("res/background.png");
     private int numEnemy = 0;
     private int numOfDoors = 0;
 
-    // ----- contents -----
+    // ----- Contents -----
     private List<Door> doors = new ArrayList<>(); // 1st is primary door, 2nd is secondary
     private List<Projectile> projectiles = new ArrayList<>();
     private List<Projectile> toRemoveProj = new ArrayList<>();
 
-    // ----- constructor -----
+    // ----- Constructor -----
 
     /**
-     * Constructs a room with a given index.
+     * Constructs a room with a given index
      *
      * @param index the index of this room in the dungeon
      */
@@ -45,9 +42,10 @@ public abstract class  Room {
         this.index = index;
     }
 
-    // ---- updating room -----
 
-    // try to move player, if valid move, move player
+    // ---- Updating room -----
+
+    // Try to move player, if valid move, move player
     private void updatePlayerMovement(PlayerCharacter player, Input input) {
         Player playerSelf = player.getPlayer();
         player.update(input, this);
@@ -56,17 +54,17 @@ public abstract class  Room {
         playerSelf.movePosition(validMove);
     }
 
-    /*
-     * when player enters new uncleared stage, auto ock the doors when player left the door
-     * if player tried to enter doors, check if its valid
-     * if yes, move to the room the door is associated with
-     */
+
+    // Handle player interaction with door
     private void handleDoorInteractions(Player player, Dungeon dungeon) {
         for (Door door: doors) {
+            // When player enters new uncleared stage, auto lock the doors when player left the door
             door.updateCurrentDoorSide(this);
             door.autoLock(player);
 
+            // If player tried to enter doors, check if its valid
             int hasTryEnterDoor = door.enterDoor(player, this);
+            // If yes, move to the room the door is associated with
             if (hasTryEnterDoor >= 0) {
                 player.movePosition(door.getSpawnLocation());
                 dungeon.moveToRoom(hasTryEnterDoor);
@@ -75,8 +73,9 @@ public abstract class  Room {
         }
     }
 
+
     /**
-     * Main update method for the room.
+     * Main update method for the room
      *
      * @param player the player character
      * @param input the current input state
@@ -88,7 +87,7 @@ public abstract class  Room {
         handleDoorInteractions(playerChar, dungeon);
         updateProjectiles();
 
-        // trigger collisions events if collides
+        // Trigger collisions events if collides
         for (Projectile projectile: getProjectiles()) {
             for (Door door: doors) {
                 if (projectile.collidesWith(door)) {
@@ -100,11 +99,12 @@ public abstract class  Room {
         projectiles.removeAll(toRemoveProj);
     }
 
-    // ----- check movements -----
+
+    // ----- Check movements -----
 
     /**
      * Validates the player's move, checking collisions with blockable entities
-     * and window boundaries.
+     * and window boundaries
      *
      * @param player the player character
      * @param nextMove the intended next position
@@ -112,18 +112,19 @@ public abstract class  Room {
      */
     public Point validateMove(PlayerCharacter player, Point nextMove) {
         Player playerSelf = player.getPlayer();
-        // temporarily move player to check if collides with locked doors
+        // Temporarily move player to check if collides with locked doors
         if (temporarilyCheckCollision(playerSelf, nextMove, doors)) {
             return player.trySolveCollision(nextMove,
                     (x, y) -> temporarilyCheckCollision(playerSelf, new Point(x, y), doors));
         }
 
-        // if no door collision, make sure is within window
+        // If no door collision, make sure is within window
         return fixWithinWindow(playerSelf, nextMove);
     }
 
+
     /**
-     * Temporarily moves the player to a position to check collisions with entities.
+     * Temporarily moves the player to a position to check collisions with entities
      *
      * @param player the player
      * @param pos the position to test
@@ -134,13 +135,16 @@ public abstract class  Room {
         Point original = player.getPosition();
         player.movePosition(pos);
 
+        // Check if player collides with anything
         boolean collides = hasBlocked(player, entity);
 
+        // Go back to original position
         player.movePosition(original);
         return collides;
     }
 
-    // keep player within window boundaries
+
+    // Keep player within window boundaries
     private Point fixWithinWindow(Player player, Point nextMove) {
 
         Rectangle windowBox = new Rectangle(0, 0,
@@ -150,14 +154,14 @@ public abstract class  Room {
         double x = nextMove.x;
         double y = nextMove.y;
 
-        // ensure player is within width
+        // Ensure player is within width
         if (playerBox.left() < windowBox.left()) {
             x += (windowBox.left() - playerBox.left());
         } else if (playerBox.right() > windowBox.right()) {
             x -= (playerBox.right() - windowBox.right());
         }
 
-        // ensure player is within height
+        // Ensure player is within height
         if (playerBox.top() < windowBox.top()) {
             y += (windowBox.top() - playerBox.top());
         } else if (playerBox.bottom() > windowBox.bottom()) {
@@ -189,7 +193,7 @@ public abstract class  Room {
     }
 
 
-    // ----- render -----
+    // ----- Render -----
 
     /** Renders the room background */
     public void renderBackground() {
@@ -215,13 +219,15 @@ public abstract class  Room {
         renderDoors();
     }
 
+    // Update the stats of the projectiles (new positions..)
     private void updateProjectiles() {
         for (Projectile projectile: projectiles) {
             projectile.update();
         }
     }
 
-    // ----- door management -----
+
+    // ----- Door management -----
 
     /** Adds a door to this room */
     public void addDoor(Door newDoor) {
@@ -238,7 +244,11 @@ public abstract class  Room {
         }
     }
 
-    /** Unlocks all doors when the room is cleared */
+
+    /**
+     * Check if all the doors are locked
+     * @return true if all doors are locked, else false
+     */
     public boolean allDoorLocked() {
         for (Door door : doors) {
             if (!door.isBlockable()){
@@ -248,10 +258,11 @@ public abstract class  Room {
         return true;
     }
 
-    // ----- getters -----
+
+    // ----- Getters -----
 
     /**
-     * Returns the index of this room in the dungeon.
+     * Returns the index of this room in the dungeon
      *
      * @return the room index
      */
@@ -259,8 +270,9 @@ public abstract class  Room {
         return index;
     }
 
+
     /**
-     * Returns the number of doors currently in this room.
+     * Returns the number of doors currently in this room
      *
      * @return the number of doors
      */
@@ -268,9 +280,10 @@ public abstract class  Room {
         return numOfDoors;
     }
 
+
     /**
-     * Returns the list of doors in this room.
-     * The first door is the primary door, the second (if any) is secondary.
+     * Returns the list of doors in this room
+     * The first door is the primary door, the second (if any) is secondary
      *
      * @return the list of doors
      */
@@ -278,8 +291,9 @@ public abstract class  Room {
         return doors;
     }
 
+
     /**
-     * Returns the GameConfig instance associated with this room.
+     * Returns the GameConfig associated with this room
      *
      * @return the game configuration
      */
@@ -287,8 +301,9 @@ public abstract class  Room {
         return config;
     }
 
+
     /**
-     * Returns the list of active projectiles in this room.
+     * Returns the list of active projectiles in this room
      *
      * @return the projectiles in the room
      */
@@ -296,8 +311,9 @@ public abstract class  Room {
         return projectiles;
     }
 
+
     /**
-     * Returns the list of projectiles marked for removal.
+     * Returns the list of projectiles marked for removal
      *
      * @return the projectiles to be removed
      */
@@ -305,18 +321,19 @@ public abstract class  Room {
         return toRemoveProj;
     }
 
-// ----- update / helper methods -----
+
+    // ----- Update methods -----
 
     /**
-     * Increments the number of doors in this room by 1.
+     * Increments the number of doors in this room by 1
      */
     public void updateNumOfDoors() {
         this.numOfDoors++;
     }
 
+
     /**
-     * Decreases the count of remaining enemies by the specified amount.
-     * Typically called when enemies are defeated.
+     * Decreases the count of remaining enemies by the specified amount
      *
      * @param amount the number of defeated enemies
      */
@@ -324,9 +341,10 @@ public abstract class  Room {
         numEnemy -= amount;
     }
 
+
     /**
-     * Increments the count of enemies in this room by 1.
-     * Typically called when a new enemy is added to the room.
+     * Increments the count of enemies in this room by 1
+     * Typically called when a new enemy is added to the room
      */
     public void addEnemy() {
         numEnemy++;

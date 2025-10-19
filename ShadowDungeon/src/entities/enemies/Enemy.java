@@ -72,7 +72,7 @@ public abstract class Enemy extends Entity {
     // ---- Behaviours ----
 
     /**
-     * Marks this enemy for removal from the room if inactive.
+     * Marks this enemy for removal from the room if inactive
      *
      * @param currRoom The room the enemy is in
      */
@@ -82,6 +82,7 @@ public abstract class Enemy extends Entity {
             room.getToRemoveEnemies().add(this);
         }
     }
+
 
     /**
      * Automated behavior for enemies
@@ -97,7 +98,7 @@ public abstract class Enemy extends Entity {
     /**
      * Set enemy health
      *
-     * @param health the heatlh of enemy
+     * @param health The heatlh of enemy
      */
     public void setHealth(double health) {
         this.health = health;
@@ -107,7 +108,7 @@ public abstract class Enemy extends Entity {
     /**
      * Set the amount of coins dropped when defeated
      *
-     * @param coins the amount of coins after defeated
+     * @param coins The amount of coins after defeated
      */
     public void setCoins(int coins) {
         this.coins = coins;

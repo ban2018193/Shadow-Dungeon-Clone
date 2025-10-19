@@ -9,25 +9,31 @@ import rooms.Room;
 import java.util.function.BiPredicate;
 
 /**
- * Handles the overall control of the player in the game.
- * This class manages player movement, direction, and shooting behavior.
+ * Handles the overall control of the player in the game
+ * This class manages player movement, direction, and shooting behavior, switching characters
  */
 public class PlayerCharacter {
 
-    // ---- settings ----
+    // ---- Settings ----
     private Player player;
     private final int RIGHT = 0;
     private final int LEFT = 1;
     private final int movingSpeed;;
 
+
+    // ---- Constructor -----
+
     /**
-     * Creates a new controllable player with default configuration.
+     * Creates a new controllable player with default player settings
      */
     public PlayerCharacter() {
         this.player = new Player();
         GameConfig config = GameConfig.getInstance();
         movingSpeed = config.MOVING_SPEED;
     }
+
+
+    // ---- Methods ----
 
     /**
      * Replaces the current player with another character type.
@@ -40,9 +46,8 @@ public class PlayerCharacter {
     }
 
 
-
     /**
-     * Calculates the next position of the player based on keyboard input,
+     * Calc the next position of the player based on keyboard input,
      * without actually updating the position yet.
      *
      * @param input the current keyboard input
@@ -60,10 +65,11 @@ public class PlayerCharacter {
         return new Point(newX, newY);
     }
 
+
     /**
-     * Tries to find a valid movement position when the intended move collides with obstacles.
+     * Tries to find a valid movement position to not collide with move blockable objects
      *
-     * @param nextMove       the intended new position
+     * @param nextMove the intended new position
      * @param collisionCheck a function that checks if a position collides with something
      * @return the nearest valid movement position
      */
@@ -77,20 +83,21 @@ public class PlayerCharacter {
         boolean collideXY = collisionCheck.test(newX, newY);
 
         if (!collideXY) {
-            return new Point(newX, newY); // move if is valid
+            return new Point(newX, newY); // Move if is valid
         } else if (!collideX) {
-            return new Point(newX, playerPosition.y); // try only continues moving to x if y collides
+            return new Point(newX, playerPosition.y); // Try only continues moving to x if y collides
         } else if (!collideY) {
-            return new Point(playerPosition.x, newY); // try only continues moving to y if x collides
+            return new Point(playerPosition.x, newY); // Try only continues moving to y if x collides
         } else {
-            return playerPosition; // stay in place if stuck
+            return playerPosition; // Stay in place if stuck
         }
     }
 
-    // ----- updates ----
+
+    // ----- Updates ----
 
     /**
-     * Updates the player's facing direction based on mouse position.
+     * Updates the player's facing direction based on mouse position
      *
      * @param cursor the mouse cursor position
      */
@@ -103,11 +110,12 @@ public class PlayerCharacter {
         }
     }
 
+
     /**
-     * Main update method for player actions per frame.
-     * Handles shooting, direction changes, and cooldown updates.
+     * Main update method for player actions per frame
+     * Handles shooting, direction changes, and cooldown updates
      *
-     * @param input   the player's input (keyboard + mouse)
+     * @param input the player's input
      * @param current the current room the player is in
      */
     public void update(Input input, Room current) {
@@ -118,16 +126,16 @@ public class PlayerCharacter {
         }
     }
 
-    // ---- getters ----
+
+    // ---- Getters ----
 
     /**
-     * Returns the current player being controlled.
+     * Returns the current character being controlled
      *
-     * @return the current {@link Player}
+     * @return the current Player
      */
     public Player getPlayer() {
         return player;
     }
-
 
 }

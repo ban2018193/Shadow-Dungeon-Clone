@@ -2,24 +2,23 @@ package entities.objects.projectiles;
 
 import bagel.util.Point;
 import bagel.util.Vector2;
-
 import entities.Entity;
 import entities.player.Player;
 
 /**
- * Represents a bullet fired by the player.
- * The bullet moves in a given direction and deals damage upon collision.
+ * Bullet: a projectile fired by the player
+ * The bullet moves in a given direction and deals damage
  */
 public class Bullet extends Projectile {
 
-    // ----- constructor -----
+    // ----- Constructor -----
 
     /**
-     * Creates a bullet at a specific position and direction.
+     * Creates a bullet at a specific position and direction
      *
-     * @param position starting position of the bullet
-     * @param dir normalized vector representing the direction of movement
-     * @param player the player who fired the bullet (used to get damage)
+     * @param position Starting position of the bullet
+     * @param dir Normalized vector of the direction of movement
+     * @param player the player who fired the bullet
      */
     public Bullet(Point position, Vector2 dir, Player player) {
         super(position, dir, "res/bullet.png");
@@ -28,13 +27,14 @@ public class Bullet extends Projectile {
 
     }
 
-    // ---- handle interactions ----
+
+    // ---- Handle interactions ----
 
     /**
-     * Called when the bullet collides with an entity.
-     * Deactivates the bullet if the entity is affected by it.
+     * Trigger consequneces of Bullet hitting on other entity
+     * Bullet will disperse when hit certain objects
      *
-     * @param entity the entity that the bullet collided with
+     * @param entity The entity that the bullet collided with
      * @param player the player information
      */
     @Override

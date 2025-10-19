@@ -3,29 +3,28 @@ package entities.objects.projectiles;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 import bagel.util.Vector2;
-
 import entities.Entity;
 import rooms.Room;
 
 /**
- * Abstract class representing a projectile in the game.
+ * Abstract class for projectiles in the game
  * Handles movement, collision detection, and deactivation when outside the window.
  */
 public abstract class Projectile extends Entity {
 
-    // ---- settings ----
+    // ---- Settings ----
     private double speed;
     private final Vector2 moveDir;
     private double damage;
 
-    // --- constructor ----
+    // --- Constructor ----
 
     /**
-     * Creates a projectile at a given position with a specified direction and image.
+     * Creates a projectile at a given position with a direction and image
      *
      * @param position  starting position of the projectile
-     * @param moveDir   normalized vector indicating the direction of movement
-     * @param imagePath path to the projectile image (can be null)
+     * @param moveDir   direction of movement
+     * @param imagePath path to the projectile image
      */
     public Projectile(Point position, Vector2 moveDir, String imagePath) {
         super(position, imagePath);
@@ -34,19 +33,19 @@ public abstract class Projectile extends Entity {
     }
 
 
-    // ---- handle interactions -----
+    // ---- Handle interactions -----
 
     /**
-     * Checks collision with another entity.
+     * Checks collision with another entity
      *
      * @param entity entity to check against
-     * @return true if bounding boxes intersect
+     * @return true if boxes intersect
      */
     public  boolean collidesWith(Entity entity) {
         return getBoundingBox().intersects(entity.getBoundingBox());
     }
 
-    // ---- behaviours ----
+    // ---- Behaviours ----
 
     /**
      * Check if projectile is outside window boundaries
@@ -64,19 +63,23 @@ public abstract class Projectile extends Entity {
         return hitLeft || hitRight || hitTop || hitBottom;
     }
 
-    /** Deactivates the projectile. */
+
+    /** Deactivates the projectile */
     public void deactivate() {
         setActive(false);
     }
 
+
     /**
+     * Projectiles do not block player movement by default
      *
-     * @return false, by default projectiles do not block movement
+     * @return false by default
      */
     @Override
     public boolean isBlockable() {
         return false;
     }
+
 
     /**
      * Add inactive projectiles into a buffer list in room to be deleted
@@ -90,14 +93,14 @@ public abstract class Projectile extends Entity {
         }
     }
 
-    // ---- updates -----
 
-    // Moves the projectile according to its speed and direction.
+    // ---- Updates -----
+
+    // Moves the projectile according to its speed and direction
     private void move() {
         Point current = getPosition();
 
-        // Calculate movement offset: normalized direction × speed (pixels per frame)
-        // Since moveDir is normalized (length = 1), this gives exactly 'speed' pixels of movement
+        // Calc movement offset: normalized direction (get speed)
         Vector2 movement = moveDir.mul(speed);
 
         // Move to new position
@@ -106,9 +109,10 @@ public abstract class Projectile extends Entity {
         movePosition(newPosition);
     }
 
+
     /**
-     * Updates the projectile each frame.
-     * Moves it in its direction and deactivates it if it goes outside the window.
+     * Updates the projectile each frame
+     * Moves and deactivates it if it goes outside the window.
      */
     public void update() {
         move();
@@ -117,10 +121,11 @@ public abstract class Projectile extends Entity {
         }
     }
 
-    // --- setter ---
+
+    // --- Setter ---
 
     /**
-     * Sets the speed of the projectile.
+     * Sets the speed of the projectile
      *
      * @param speed pixels per frame
      */
@@ -128,8 +133,9 @@ public abstract class Projectile extends Entity {
         this.speed = speed;
     }
 
+
     /**
-     * Sets the damage dealt by this projectile.
+     * Sets the damage dealt by this projectile
      *
      * @param damage damage value
      */
@@ -137,10 +143,11 @@ public abstract class Projectile extends Entity {
         this.damage = damage;
     }
 
-    // ---getters ---
+
+    // --- Getters ---
 
     /**
-     * Get the damage this projectile cna deal.
+     * Get the damage this projectile cna deal
      *
      * @return the damage this projectile deals
      * */

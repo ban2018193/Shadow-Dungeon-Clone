@@ -5,7 +5,7 @@ import bagel.util.Point;
 import utils.IOUtils;
 
 /**
- * contains all the important game settings
+ * Contains all the important game settings
  */
 public class GameConfig {
 
@@ -216,6 +216,7 @@ public class GameConfig {
         GAME_END_WON = messageProps.getProperty("gameEnd.won");
     }
 
+
     // ---- Advanced parsing methods ----
 
     /**
@@ -237,6 +238,7 @@ public class GameConfig {
     public String[] getTreasureInfo(String treasureKey) {
         return IOUtils.parseContents(gameProps.getProperty(treasureKey), ";");
     }
+
 
     // ----- Getters -----
 
