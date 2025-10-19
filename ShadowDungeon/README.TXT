@@ -3,14 +3,20 @@ Design Assumptions and Implementation Decisions
 Package Structure
 
 src/
-├── app/           # Main application entry point
-├── config/        # Configuration management
-├── dungeon/       # Room management and game state
-├── entities/      # All game objects (players, enemies, items)
-├── rooms/         # Room implementations and door mechanics
-└── utils/         # Utility functions
+├── app/              # Main application entry point
+├── config/           # Configuration management
+├── dungeon/          # Room management and game state
+├── entities/         # All game objects (players, enemies, items)
+│   ├── capabilities/ # Interfaces for behaviours
+│   ├── enemies/
+│   ├── objects/
+│   │   └── projectiles/
+│   └── player/
+├── rooms/            # Room implementations and door mechanics
+│   └── objects/
+├── stores/           # Store that player can open
+└── utils/            # Utility functions
 
-Clear separation of functionality. Easier to maintain and navigate.
 
 -------------------------------------------------------------------------
 
@@ -30,6 +36,7 @@ Justification:
 - Future expansions may require similar reset/preparation functionality
 - Shared interface allows consistent behavior for game state transitions
 
+
 2. Entity Hierarchy Design
 
 Assumption: All interactive game objects share common properties (position, image).
@@ -43,6 +50,7 @@ Justification:
 - Promotes code reuse
 - Easier to add new entity types in future expansions
 
+
 3. Room Safety Assumptions
 
 Assumption: Rooms outside the main dungeon (PrepRoom, EndRoom) are completely safe spaces.
@@ -55,18 +63,8 @@ Justification:
 - Provides players with guaranteed safe spaces for preparation and completion
 - Clear distinction between challenge areas and safe zones
 
-4. Key Collection System
 
-Assumption: Future game expansions may require collecting multiple keys to progress.
-
-Implementation Decision:
-- Added `keysRequired` to track number of keys left require to clear the room
-
-Justification:
-- Specification doesn't limit key collection to exactly one key per room
-- Easier to implement future features without major refactoring
-
-5. Configuration Management
+4. Configuration Management
 
 Assumption: Game settings should be externalized and easily modifiable without code changes.
 
@@ -79,7 +77,8 @@ Justification:
 - Supports localization through message properties
 - Reduces repeated gameProperties.get in classes
 
-6. Player movements
+
+5. Player movements
 
 Assumption: When player is blocked by obstacles and multiple keys are pressed simultaneously,
 player should attempt alternative movement rather than stopping completely
@@ -89,3 +88,23 @@ player should attempt alternative movement rather than stopping completely
 
  Justification:
  - Provides better user experience by maintaining fluid movement
+
+Design explanation
+
+1. Game core:
+Dungeon is the core mechanism that manages the states of the room and start of the
+game. Store would pause activity in Dungeon when it’s being called.
+
+2. Creating bullet kins and ashen bullet kins:
+Since both of them share the same logic but different states, I merged them both
+together. We will determine which it will be by initialising the class’s instance differently
+by initBulletKin() initAshenBulletKin().
+
+3. Rendering:
+The room will take care of all of the renderings. It will contain all of the entities inside and
+call their render() method by looping through the collidables.
+
+4. Interaction logic:
+Check if collided with any entity (by loop), if yes, call triggerCollisionEvent(). This method is about making
+change to player. And if it's being attacked by projectiles, it will call attackByProjectile, which usually
+is about making change to itself.
