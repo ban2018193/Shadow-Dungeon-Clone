@@ -25,10 +25,12 @@ import java.util.function.Function;
 public class BattleRoom extends Room {
 
     // ----- Obstacles classes ------
+
     private List<Entity> entities = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Entity> toRemoveEntities = new ArrayList<>();
     private List<Enemy> toRemoveEnemies = new ArrayList<>();
+
 
     // ---- Constructor -----
 

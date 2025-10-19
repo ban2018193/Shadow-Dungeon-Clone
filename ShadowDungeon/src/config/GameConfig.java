@@ -10,9 +10,11 @@ import utils.IOUtils;
 public class GameConfig {
 
     // ----- Settings -----
+
     private final Properties gameProps = IOUtils.readPropertiesFile("res/app.properties");
     private final Properties messageProps = IOUtils.readPropertiesFile("res/message.properties");
     private static GameConfig instance = null;
+
 
     // Window settings
     public final int WINDOW_WIDTH;

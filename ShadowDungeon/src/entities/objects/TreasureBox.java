@@ -14,10 +14,10 @@ import utils.IOUtils;
 public class TreasureBox extends Entity {
 
     // ----- Constants -----
-    private static int COIN_INDEX = 2;
 
-    // ----- Stats ----
+    private static int COIN_INDEX = 2;
     private final double coinValue;
+
 
     // ---- Constructors -----
 

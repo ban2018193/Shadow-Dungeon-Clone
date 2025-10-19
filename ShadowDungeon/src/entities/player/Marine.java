@@ -9,6 +9,8 @@ import entities.objects.River;
  */
 public class Marine extends Player{
 
+    // ---- Constructor ----
+
     /**
      * Creates a new Marine character based on a current player stats
      *
@@ -23,6 +25,7 @@ public class Marine extends Player{
         setChoseChar(true);
     }
 
+    // --- Methods ----
 
     /**
      * Applies damage to the Marine, but immune to water
@@ -36,4 +39,5 @@ public class Marine extends Player{
             super.gainDamage(damage, entity);
         }
     }
+
 }

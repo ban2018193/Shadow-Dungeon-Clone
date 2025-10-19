@@ -10,8 +10,10 @@ import rooms.objects.Door;
 public class EndRoom extends OutsideRoom {
 
     // ---- Titles ----
+
     private final String winText;
     private final String lostText;
+
 
     // ---- Constructor ----
 
@@ -55,4 +57,5 @@ public class EndRoom extends OutsideRoom {
             door.setUnlocked(false);
         }
     }
+
 }

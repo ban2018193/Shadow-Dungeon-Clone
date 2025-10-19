@@ -17,6 +17,7 @@ import rooms.objects.Door;
 public class ShadowDungeon extends AbstractGame {
 
     // ----- Settings -----
+
     public final GameConfig config = GameConfig.getInstance();
     private static ShadowDungeon instance;
     private Dungeon shadowDungeon;

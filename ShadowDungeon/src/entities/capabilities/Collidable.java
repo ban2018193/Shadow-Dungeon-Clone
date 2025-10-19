@@ -69,4 +69,5 @@ public interface Collidable{
      * @param currRoom the room this object is in
      */
     public void deleteInactive(Room currRoom);
+
 }

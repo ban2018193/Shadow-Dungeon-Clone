@@ -15,6 +15,7 @@ import rooms.Room;
 public class BulletKin extends Enemy implements Shootable {
 
     // ---- Settings ----
+
     private int firingRate;
     private int framesSinceLast = 0;
     private double damage = getConfig().FIREBALL_DAMAGE;

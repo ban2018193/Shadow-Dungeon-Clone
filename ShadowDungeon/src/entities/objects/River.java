@@ -13,7 +13,9 @@ import entities.player.Player;
 public class River extends Entity {
 
     // ---- Setting ----
+
     private final double damage;
+
 
     // ----  Constructor ----
 

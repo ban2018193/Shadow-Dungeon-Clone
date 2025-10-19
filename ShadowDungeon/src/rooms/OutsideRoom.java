@@ -15,15 +15,18 @@ import rooms.objects.Door;
 public abstract class OutsideRoom extends Room{
 
     // ----- Texts in the room -----
+
     private String title;
     private Point titleXY;
     private final double titleY;
+
 
     // ---- Settings -----
     private final Point restartAreaXY;
     private final Image restartAreaImage = new Image("res/restart_area.png");
     private final Rectangle restartArea;
     private final Font titleFont;
+
 
     // ----- Constructor -----
 
@@ -130,4 +133,5 @@ public abstract class OutsideRoom extends Room{
         this.title = title;
         setTitleSettings();
     }
+
 }

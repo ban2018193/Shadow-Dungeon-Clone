@@ -10,7 +10,9 @@ import entities.enemies.BulletKin;
 public class Robot extends Player{
 
     // --- Settings ----
+
     private final int BONUS_COINS = getConfig().ROBOT_EXTRA_COIN;
+
 
     // ----- Constructor ----
 

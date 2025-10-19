@@ -11,6 +11,7 @@ import java.util.List;
  * A utility class that provides methods to read and write files
  */
 public class IOUtils {
+
     /***
      * Read a properties file and return a Properties object
      * @param configFile: the path to the properties file
@@ -88,4 +89,5 @@ public class IOUtils {
     public static Point getPointProperty(Properties gameProps, String x) {
         return IOUtils.parseCoords(gameProps.getProperty(x));
     }
+
 }

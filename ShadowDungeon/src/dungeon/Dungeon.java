@@ -14,17 +14,18 @@ import stores.Store;
 public class Dungeon {
 
     // ----- Defaults -----
+
     public final GameConfig config = GameConfig.getInstance();
     private final int START_ROOM = 0;
     private final int END_ROOM;
 
+
     // ----- Dungeon info -----
+
     private final Room[] rooms;
     private Room activeRoom;
     private boolean hasLost = false;
     private final Store store = new Store();
-
-    // ---- Player info ----
     private final PlayerCharacter playerChar;
 
 

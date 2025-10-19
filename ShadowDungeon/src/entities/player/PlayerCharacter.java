@@ -15,6 +15,7 @@ import java.util.function.BiPredicate;
 public class PlayerCharacter {
 
     // ---- Settings ----
+
     private Player player;
     private final int RIGHT = 0;
     private final int LEFT = 1;

@@ -13,9 +13,11 @@ import rooms.Room;
 public abstract class Projectile extends Entity {
 
     // ---- Settings ----
+
     private double speed;
     private final Vector2 moveDir;
     private double damage;
+
 
     // --- Constructor ----
 

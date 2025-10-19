@@ -17,10 +17,12 @@ import rooms.*;
 public abstract class Entity implements Collidable {
 
     // ---- Settings ----
+
     private static final GameConfig config = GameConfig.getInstance();
     private Point position;
     private Image image;
     private boolean isActive = true;
+
 
     // ----- Constructor ----
 

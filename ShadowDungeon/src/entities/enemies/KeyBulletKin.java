@@ -15,9 +15,12 @@ import rooms.*;
 public class KeyBulletKin extends Enemy {
 
     // ---- Setting -----
+
     private int movingSpeed = getConfig().KEY_BULLET_KIN_SPEED;
 
+
     // ---- Routes ----
+
     private List<Point> route = new ArrayList<>();
     private int routeSize;
     private int currentDesIdx = 0;

@@ -13,6 +13,7 @@ import rooms.*;
 public abstract class Enemy extends Entity {
 
     // ---- Stats ----
+
     private double health;
     private int coins = 0;
     private final double damage = 0.2;

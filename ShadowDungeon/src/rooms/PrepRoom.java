@@ -15,23 +15,31 @@ public class PrepRoom extends OutsideRoom {
     private final int N_CHARACTERS = 2;
 
     // ----- Font settings ----
+
     private final Font promptFont = new Font(getConfig().FONT_PATH, getConfig().PROMPT_FONT_SIZE);
     private final Font spriteFont = new Font(getConfig().FONT_PATH, getConfig().PLAYER_STATS_FONT_SIZE);
 
+
     // ---- Messages ----
+
     private final String prompt = getConfig().MOVE_MESSAGE;
     private final String[] spriteText = {getConfig().MARINE_DESCRIPTION, getConfig().ROBOT_DESCRIPTION};
     private final String selectMes = getConfig().SELECT_MESSAGE;
 
+
     // ---- Positions of messages ----
+
     private final Point promptXY;
     private final Point[] spriteXY = {getConfig().MARINE_POS, getConfig().ROBOT_POS};
     private final Point[] spriteTextXY = {getConfig().MARINE_MESSAGE_POS, getConfig().ROBOT_MESSAGE_POS};
     private final Point selectXY;
 
+
     // ---- Images ----
+
     private final Image[] spriteImage = {new Image("res/marine_sprite.png"),
             new Image("res/robot_sprite.png")};
+
 
     // ----- Constructors ----
 
@@ -116,4 +124,5 @@ public class PrepRoom extends OutsideRoom {
         renderPrep();
         renderProjectiles();
     }
+
 }

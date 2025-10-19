@@ -14,11 +14,14 @@ import entities.player.*;
 public class Store {
 
     // ----- Fields -----
+
     private boolean isOpened = false;
     private GameConfig config = GameConfig.getInstance();
     private final int MAX_W_LVL = 2;
 
+
     // ----- Constants -----
+
     private final int ADVANCE_W = 1;
     private final int ADVANCE_D;
     private final int ELITE_W = 2;

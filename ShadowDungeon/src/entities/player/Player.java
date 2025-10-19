@@ -18,15 +18,20 @@ import rooms.Room;
 public class Player extends Entity implements Shootable {
 
     // ------ Settings -----
+
     private double damage = getConfig().FIREBALL_DAMAGE;
     private double firingRate = getConfig().BULLET_FREQ;
 
-    // ---- Track stats
+
+    // ---- Track stats ----
+
     private boolean choseChar = false;
     private int framesSinceLast = 0;
     private PlayerStats playerStats = new PlayerStats();
 
+
     // ----Image sources ----
+
     private Image playerR = new Image("res/player_right.png");
     private Image playerL = new Image("res/player_left.png");
 

@@ -11,6 +11,7 @@ import entities.player.Player;
  */
 public class Table extends Entity {
 
+
     // ----- Constructor ----
 
     /**

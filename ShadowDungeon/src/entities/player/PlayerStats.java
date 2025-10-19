@@ -11,13 +11,16 @@ import config.GameConfig;
 public class PlayerStats {
 
     // ---- Stats ----
+
     private final GameConfig config = GameConfig.getInstance();
     private double health;
     private double coins;
     private int keys = 0;
     private int weaponLevel = 0;
 
+
     // --- Settings ----
+
     private String healthTitle = config.HEALTH_DISPLAY;
     private String coinsTitle = config.COIN_DISPLAY;
     private String weaponTitle = config.WEAPON_DISPLAY;

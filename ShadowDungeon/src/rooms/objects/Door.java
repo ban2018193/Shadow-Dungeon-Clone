@@ -17,16 +17,21 @@ import entities.player.Player;
 public class Door extends Entity {
 
     // ---- Constants -----
+
     private enum DoorSide {ROOM_A, ROOM_B};
     private final static int CONNECTED_ROOMS = 2;
     private final static int FAILED = -1;
 
+
     // ----- Settings -----
+
     private final Room[] rooms = new Room[CONNECTED_ROOMS]; // First is Primary room, sec is Secondary
     private final Point[] startXY = new Point[CONNECTED_ROOMS];
     private final Rectangle[] doorBox = new Rectangle[CONNECTED_ROOMS];
 
+
     // ----- Door stats -----
+
     private boolean isUnlocked = false;
     private DoorSide currentDoor = null;
 
@@ -35,9 +40,12 @@ public class Door extends Entity {
     // determines if player just enter the door from other side
     private boolean recentlyInteracted = false;
 
+
     // ----- Images of doors -----
+
     private static final Image doorUnlock = new Image("res/unlocked_door.png");
     private static final Image doorLocked = new Image("res/locked_door.png");
+
 
     // ---- Constructor -----
 

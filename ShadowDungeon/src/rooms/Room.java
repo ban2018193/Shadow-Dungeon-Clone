@@ -20,16 +20,20 @@ import java.util.List;
 public abstract class  Room {
 
     // ----- Room stats -----
+
     private final GameConfig config = GameConfig.getInstance();
     private final int index; // stage of room is in dungeon
     private final Image background = new Image("res/background.png");
     private int numEnemy = 0;
     private int numOfDoors = 0;
 
+
     // ----- Contents -----
+
     private List<Door> doors = new ArrayList<>(); // 1st is primary door, 2nd is secondary
     private List<Projectile> projectiles = new ArrayList<>();
     private List<Projectile> toRemoveProj = new ArrayList<>();
+
 
     // ----- Constructor -----
 

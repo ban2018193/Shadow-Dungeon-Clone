@@ -8,8 +8,6 @@ import entities.Entity;
  */
 public class Wall extends Entity {
 
-    // ----- Constructor ----
-
     /**
      * Creates a wall at the specified position
      *
