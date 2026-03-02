@@ -1,4 +1,5 @@
-This is a clone of the game Shadow Dungeon, where Bagel (Java-based graphics library) and Java is used
+This is a clone of the game Shadow Dungeon, where Bagel (Java-based graphics library) and Java is used 
+
 How to run:
 cd ShadowDungeon --> run src/app/ShadowDungeon
 
