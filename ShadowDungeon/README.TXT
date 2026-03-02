@@ -19,6 +19,8 @@ src/
 
 
 -------------------------------------------------------------------------
+How to run:
+cd ShadowDungeon --> run zrc/app/ShadowDungeon
 
 Design Assumptions
 
