@@ -4,24 +4,6 @@ cd ShadowDungeon --> run src/app/ShadowDungeon
 
 Design Assumptions and Implementation Decisions
 
-Package Structure
-
-src/
-├── app/              # Main application entry point
-├── config/           # Configuration management
-├── dungeon/          # Room management and game state
-├── entities/         # All game objects (players, enemies, items)
-│   ├── capabilities/ # Interfaces for behaviours
-│   ├── enemies/
-│   ├── objects/
-│   │   └── projectiles/
-│   └── player/
-├── rooms/            # Room implementations and door mechanics
-│   └── objects/
-├── stores/           # Store that player can open
-└── utils/            # Utility functions
-
-
 -------------------------------------------------------------------------
 
 Design Assumptions
